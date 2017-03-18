@@ -1,0 +1,159 @@
+/* Normalize.css */
+// @import "normalize"; // included in antd
+
+/* Font Awesome */
+// @import "font/font-awesome";
+
+/* Utilities */
+.mt10 {
+    margin-top: 10px;
+}
+
+.mt20 {
+    margin-top: 20px;
+}
+
+.mt30 {
+    margin-top: 30px;
+}
+
+.mr10 {
+    margin-right: 10px;
+}
+
+.mr20 {
+    margin-right: 20px;
+}
+
+.mr30 {
+    margin-right: 30px;
+}
+
+.mb10 {
+    margin-bottom: 10px;
+}
+
+.mb20 {
+    margin-bottom: 20px;
+}
+
+.mb30 {
+    margin-bottom: 30px;
+}
+
+.ml10 {
+    margin-left: 10px;
+}
+
+.ml20 {
+    margin-left: 20px;
+}
+
+.ml30 {
+    margin-left: 30px;
+}
+
+.center {
+    text-align: center;
+}
+
+/* Elements */
+
+html, body {
+    font-family: "Helvetica Neue", Helvetica, Tahoma, Arial, STXihei, "Microsoft YaHei", 微软雅黑, sans-serif;
+}
+
+img {
+    max-width: 100%;
+}
+
+#app {
+    height: 100%;
+}
+
+/* Transition */
+.trans {
+    transition: all .3s ease;
+}
+
+.trans-ease-out {
+    transition: all .3s ease-out;
+}
+
+.trans-ease-in {
+    transition: all .3s ease-in;
+}
+
+.trans-ease-in-out {
+    transition: all .3s ease-in-out;
+}
+
+.animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.fadeIn {
+  animation-name: fadeIn;
+}
+
+.fadeInDelay {
+    animation: fadeIn .8s .5s forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, 100%, 0);
+        transform: translate3d(0, 100%, 0);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+.fadeInUp {
+    -webkit-animation-name: fadeInUp;
+    animation-name: fadeInUp;
+}
+
+@keyframes slideInUp {
+  from {
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+    visibility: visible;
+  }
+
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.slideInUp {
+  -webkit-animation-name: slideInUp;
+  animation-name: slideInUp;
+}
+
+
+/* Ant Theme */
+#app {
+    .ant-tabs-nav-container {
+        font-size: 16px;
+    }
+}

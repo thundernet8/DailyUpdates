@@ -1,0 +1,63 @@
+.container {
+    max-width: 1140px;
+    margin: 0 auto;
+}
+
+.pageTitle {
+    font-size: 30px;
+    font-weight: 500;
+    text-align: center;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+}
+
+.logo {
+    width: 188px;
+    float: left;
+    img {
+        width: 100%;
+        display: block;
+    }
+}
+
+.profile {
+    position: absolute;
+    width: 100px;
+    top: 0;
+    right: 0;
+    .userName {
+        color: #fff;
+    }
+}
+
+.projectsWrap {
+    .projectCol {
+        margin-bottom: 30px;
+    }
+}
+
+.tasksWrap {
+    .addTaskBtn {
+        text-align: right;
+        margin-bottom: 30px;
+    }
+    .topFieldPanel {
+        position: relative;
+        >p {
+            font-size: 14px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .subFieldPanel {
+            position: relative;
+            font-size: 15px;
+            button {
+                float: right;
+                position: relative;
+                top: 5px;
+                right: 10px;
+            }
+        }
+    }
+}
