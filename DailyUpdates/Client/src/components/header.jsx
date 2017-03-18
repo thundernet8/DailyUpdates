@@ -8,7 +8,44 @@ const { Header } = Layout
 const logo = require('../assets/images/logo.png')
 
 export default class DUHeader extends React.Component {
+
+    static propTypes = {
+        activeNavIndex: PropTypes.number
+    }
+
+    state = {
+        activeNavIndex: -1
+    }
+
+    navs = [
+        {to: '/', title: 'Home'},
+        {to: '/today', title: 'Today'},
+        {to: '/projects', title: 'Projects'},
+        {to: '/tasks', title: 'Tasks'}
+    ]
+
+    componentWillReceiveProps (nextProps) {
+        if (nextProps.me && nextProps.me.IsAdmin) {
+            this.navs[4] = {to: '/users', title: 'Users'}
+        }
+        if (nextProps.pathName) {
+            this.navs.forEach((nav, index) => {
+                if (nav.to === nextProps.pathName) {
+                    this.setState({
+                        activeNavIndex: index
+                    })
+                }
+            })
+        }
+    }
+
     render () {
+        const menuItems = this.navs.map((nav, index) => {
+            return (
+                <Menu.Item key={index}><Link to={nav.to} activeClassName="active">{nav.title}</Link></Menu.Item>
+            )
+        })
+
         return (
             <Header>
                 <div className={classNames('logo', styles.logo)}>
@@ -17,13 +54,11 @@ export default class DUHeader extends React.Component {
                 <Menu
                     theme="dark"
                     mode="horizontal"
-                    defaultSelectedKeys={['2']}
+                    defaultSelectedKeys={[]}
+                    selectedKeys={[this.state.activeNavIndex.toString()]}
                     style={{ lineHeight: '64px' }}
                 >
-                    <Menu.Item key="1"><Link to="/" activeClassName="active">Home</Link></Menu.Item>
-                    <Menu.Item key="2"><Link to="/today" activeClassName="active">Today</Link></Menu.Item>
-                    <Menu.Item key="3"><Link to="/projects" activeClassName="active">Projects</Link></Menu.Item>
-                    <Menu.Item key="4"><Link to="/tasks" activeClassName="active">Tasks</Link></Menu.Item>
+                    {menuItems}
                 </Menu>
                 <div className={classNames('profile', styles.profile)}>
                     <span className={classNames('userName', styles.userName)}>{this.props.me ? this.props.me.Name : ''}</span>

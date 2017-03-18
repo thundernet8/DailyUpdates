@@ -16,7 +16,7 @@ export default class App extends React.Component {
     render () {
         return (
             <div>
-                <DUHeader me={this.props.me}/>
+                <DUHeader me={this.props.me} pathName={this.props.location.pathname}/>
                 <Content style={{ padding: '0 50px' }} className={classNames('container', styles.container)}>
                     {/* <Breadcrumb style={{ margin: '12px 0' }}>
                         <Breadcrumb.Item>Home</Breadcrumb.Item>

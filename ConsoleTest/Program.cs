@@ -10,6 +10,8 @@ namespace ConsoleTest
 {
     class Program
     {
+        static string Name = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+
         static void Main(string[] args)
         {
             // AddRecordTest();
@@ -23,7 +25,7 @@ namespace ConsoleTest
             try
             {
                 var modelsManager = new ModelsManager(null);
-                modelsManager.AddOwner("Xueqian", "CORP\\wuxu");
+                modelsManager.AddOwner("Xueqian", Name);
             }
             catch(Exception ex)
             {
@@ -48,7 +50,7 @@ namespace ConsoleTest
         {
             try
             {
-                var modelsManager = new ModelsManager("CORP\\wuxu");
+                var modelsManager = new ModelsManager(Name);
                 modelsManager.AddRecord(2, "destination strings", null, "detail string");
             }
             catch (Exception ex)
@@ -61,7 +63,7 @@ namespace ConsoleTest
         {
             try
             {
-                var modelsManager = new ModelsManager("CORP\\wuxu");
+                var modelsManager = new ModelsManager(Name);
                 modelsManager.UpdateRecord(1, 2, "destination strings modified", null, "detail string 12313141515156");
             }
             catch (Exception ex)

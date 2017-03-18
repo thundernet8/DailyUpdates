@@ -179,7 +179,20 @@ namespace DBModel.Services
             {
                 throw new ClientException("Owner must be the first user");
             }
-            return AddUser(name, domainName, UserRole.Owner);
+
+            using (var _dbContext = new DailyReportsContext())
+            {
+                var user = _dbContext.Users.Add(new User()
+                {
+                    Name = name,
+                    DomainName = domainName,
+                    Role = UserRole.Owner
+                });
+
+                _dbContext.SaveChanges();
+
+                return user;
+            }
         }
 
         public User AddAdmin(string name, string domainName)
