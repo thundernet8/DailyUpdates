@@ -33,6 +33,9 @@
     .userName {
         color: #fff;
         float: left;
+        a {
+            color: #fff;
+        }
     }
 }
 
@@ -129,4 +132,34 @@
 
 .createRecordWrap {
     position: relative;
+}
+
+.editRecordWrap {
+    position: relative;
+}
+
+.myTodayWrap {
+    .recordPaneHead {
+        font-size: 16px;
+        >span {
+            padding: 0 10px;
+            font-size: 15px;
+            color: #888;
+        }
+    }
+    .recordPanel {
+        position: relative;
+        a {
+            float: right;
+            margin-right: 10px;
+        }
+    }
+    .recordRow {
+        position: relative;
+        font-size: 14px;
+        padding: 10px 0;
+        >div:first-child {
+            font-weight: bold;
+        }
+    }
 }

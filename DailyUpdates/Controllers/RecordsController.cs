@@ -29,6 +29,17 @@ namespace DailyUpdates.Controllers
             return JArray.FromObject(myRecordsToday);
         }
 
+        [Route("me/{id:int}")]
+        public JObject GetMyRecord(int id)
+        {
+            Record myRecord = _modelsManager.GetMyRecord(id);
+            if (myRecord == null)
+            {
+                return null;
+            }
+            return JObject.FromObject(myRecord);
+        }
+
         [HttpPost]
         [Route("")]
         public HttpResponseMessage CreateRecord([FromBody]Record record)
@@ -44,10 +55,19 @@ namespace DailyUpdates.Controllers
             }
         }
 
-        // PUT: api/Projects/5
-        public void Put(int id, [FromBody]string value)
+        [HttpPut]
+        [Route("{id:int}")]
+        public HttpResponseMessage UpdateRecord(int id, [FromBody]Record record)
         {
-
+            try
+            {
+                Record updatedRecord = _modelsManager.UpdateRecord(id, record.FieldId, record.Destination, record.TurnOver, record.Detail);
+                return new Response(JObject.FromObject(updatedRecord));
+            }
+            catch (Exception ex)
+            {
+                return new Response(ex);
+            }
         }
 
         // DELETE: api/Projects/5

@@ -12,7 +12,7 @@ message.config({
     duration: 8
 })
 
-export default class CreateRecordPage extends React.Component {
+export default class EditRecordPage extends React.Component {
 
     state = {
         destination: '',
@@ -20,7 +20,8 @@ export default class CreateRecordPage extends React.Component {
         submitting: false,
         subTasks: null,
         fieldId: 0,
-        turnover: false
+        turnover: false,
+        prepared: false
     }
 
     desInputChange = (e) => {
@@ -51,21 +52,20 @@ export default class CreateRecordPage extends React.Component {
         })
     }
 
-    createRecord = () => {
+    updateRecord = () => {
         this.setState({
             submitting: true
         })
-        this.props.onCreateRecord({
+        this.props.onUpdateRecord(this.props.params.id, {
             FieldId: this.state.fieldId,
             Destination: this.state.destination,
             Detail: this.state.detail,
             TurnOver: this.state.turnover
         })
         .then((ret) => {
-            message.success('Record create successfully.')
+            message.success('Record update successfully.')
             this.setState({
-                submitting: false,
-                detail: ''
+                submitting: false
             })
         })
         .catch((err) => {
@@ -77,7 +77,13 @@ export default class CreateRecordPage extends React.Component {
     }
 
     componentWillMount () {
-        this.props.onGetTasks()
+        this.props.onPrepareData(parseInt(this.props.params.id))
+        .then((ret) => {
+            this.setState({
+                prepared: true,
+                turnover: ret[1].filter(task => task.Id === ret[0].FieldId)[0].TurnOver
+            })
+        })
     }
 
     componentWillReceiveProps (nextProps) {
@@ -86,47 +92,39 @@ export default class CreateRecordPage extends React.Component {
             this.setState({
                 subTasks: subTasks
             })
-            if (this.state.fieldId === 0 && subTasks.length > 0) {
-                this.setState({
-                    fieldId: subTasks[0].Id
-                })
-            }
-            if (this.state.destination === '' && subTasks.length > 0) {
-                this.setState({
-                    destination: subTasks[0].Destination
-                })
-            }
-            if (subTasks.length > 0) {
-                this.setState({
-                    turnover: subTasks[0].TurnOver !== null
-                })
-            }
+        }
+        if (nextProps.myRecord) {
+            this.setState({
+                fieldId: nextProps.myRecord.FieldId,
+                destination: nextProps.myRecord.Destination,
+                detail: nextProps.myRecord.Detail
+            })
         }
     }
 
     render () {
         if (!this.props.me || !this.props.me.IsMember) {
             return (
-                <div className={classNames('createRecordWrap err', styles.createRecordWrap)}>
-                    <h2 className={classNames('pageTitle', styles.pageTitle)}>Create Record</h2>
-                    <h3><Icon type="frown-o" />Only Member Can Create A Record.</h3>
+                <div className={classNames('editRecordWrap err', styles.editRecordWrap)}>
+                    <h2 className={classNames('pageTitle', styles.pageTitle)}>Edit Record</h2>
+                    <h3><Icon type="frown-o" />Only Member Can Update A Record.</h3>
                 </div>
             )
         }
 
-        if (!this.state.subTasks) {
+        if (!this.state.prepared) {
             return (
-                <div className={classNames('createRecordWrap loading', styles.createRecordWrap)}>
+                <div className={classNames('editRecordWrap loading', styles.editRecordWrap)}>
                     <Spin className={styles.pageSpin}/>
                 </div>
             )
         }
 
-        if (this.state.subTasks.length < 1) {
+        if (!this.props.myRecord) {
             return (
-                <div className={classNames('createRecordWrap', styles.createRecordWrap)}>
-                    <h2 className={classNames('pageTitle', styles.pageTitle)}>Create Record</h2>
-                    <h3><Icon type="frown-o" />No task fields for adding records</h3>
+                <div className={classNames('editRecordWrap err', styles.editRecordWrap)}>
+                    <h2 className={classNames('pageTitle', styles.pageTitle)}>Error</h2>
+                    <h3><Icon type="frown-o" />The record is not exist or not yours.</h3>
                 </div>
             )
         }
@@ -145,14 +143,20 @@ export default class CreateRecordPage extends React.Component {
         })
 
         return (
-            <div className={classNames('createRecordWrap', styles.createRecordWrap)}>
-                <h2 className={classNames('pageTitle', styles.pageTitle)}>Create Record</h2>
+            <div className={classNames('editRecordWrap', styles.editRecordWrap)}>
+                <h2 className={classNames('pageTitle', styles.pageTitle)}>Edit Record</h2>
                 <Form layout="horizontal">
+                    <FormItem
+                        label="Created At"
+                        {...formItemLayout}
+                    >
+                        <p>{(new Date(this.props.myRecord.Create)).toLocaleString()}</p>
+                    </FormItem>
                     <FormItem
                         label="Field"
                         {...formItemLayout}
                     >
-                        <Select defaultValue={this.state.subTasks[0].Id.toString()} style={{ width: 200 }} onChange={this.selectTask}>{fieldSelection}</Select>
+                        <Select defaultValue={this.props.myRecord.FieldId.toString()} value={this.state.fieldId.toString()} style={{ width: 200 }} onChange={this.selectTask}>{fieldSelection}</Select>
                     </FormItem>
                     <FormItem
                         label="TurnOver"
@@ -173,7 +177,7 @@ export default class CreateRecordPage extends React.Component {
                         <Input type="textarea" placeholder="" onChange={this.detailInputChange} rows={10} disabled={this.state.submitting} value={this.state.detail}/>
                     </FormItem>
                     <FormItem wrapperCol={btnWrapperCol}>
-                        <Button type="primary" size="large" style={{width: 120}} loading={this.state.submitting} disabled={this.state.destination.length < 10} onClick={this.createRecord}>Create</Button>
+                        <Button type="primary" size="large" style={{width: 120}} loading={this.state.submitting} disabled={this.state.destination.length < 10} onClick={this.updateRecord}>Update</Button>
                     </FormItem>
                 </Form>
             </div>

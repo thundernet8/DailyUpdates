@@ -157,7 +157,7 @@ namespace DBModel.Services
             }
             using (var _dbContext = new DailyReportsContext())
             {
-                return _dbContext.Set<Record>().Where(x => x.Create == date).OrderBy(x => x.Id).ToList();
+                return _dbContext.Set<Record>().Where(x => DbFunctions.TruncateTime(x.Create) == date).OrderBy(x => x.Id).ToList();
             }
         }
 
@@ -169,7 +169,7 @@ namespace DBModel.Services
             }
             using (var _dbContext = new DailyReportsContext())
             {
-                return _dbContext.Set<Record>().Where(x => x.Create == date && x.Uid == _currentUser.Id).OrderBy(x => x.Id).ToList();
+                return _dbContext.Set<Record>().Where(x => DbFunctions.TruncateTime(x.Create) == date && x.Uid == _currentUser.Id).OrderBy(x => x.Id).ToList();
             }
         }
 
@@ -178,6 +178,14 @@ namespace DBModel.Services
             using (var _dbContext = new DailyReportsContext())
             {
                 return _dbContext.Set<Record>().Find(id);
+            }
+        }
+
+        public Record GetMyRecord(int id)
+        {
+            using (var _dbContext = new DailyReportsContext())
+            {
+                return _dbContext.Set<Record>().Where(x => x.Uid == _currentUser.Id && x.Id == id).FirstOrDefault();
             }
         }
 
@@ -408,7 +416,8 @@ namespace DBModel.Services
             {
                 var nowDate = DateTime.Now.Date;
                 // relationship validation
-                if (_dbContext.Records.Any(x => x.Create == nowDate && x.FieldId == fieldId))
+                // http://stackoverflow.com/questions/14601676/the-specified-type-member-date-is-not-supported-in-linq-to-entities-only-init
+                if (_dbContext.Records.Any(x => DbFunctions.TruncateTime(x.Create) == nowDate && x.FieldId == fieldId))
                 {
                     throw new ClientException("the specified field has been filled today");
                 }
@@ -418,7 +427,7 @@ namespace DBModel.Services
                     Uid = _currentUser.Id,
                     FieldId = fieldId,
                     Destination = destination,
-                    Create = nowDate,
+                    Create = DateTime.Now,
                     Detail = detail
                 });
                 _dbContext.SaveChanges();
@@ -433,7 +442,7 @@ namespace DBModel.Services
             }
         }
 
-        public void UpdateRecord(int recordId, int fieldId, string destination, bool turnover, string detail)
+        public Record UpdateRecord(int recordId, int fieldId, string destination, bool turnover, string detail)
         {
             RequireMemberAccess();
             var record = GetRecord(recordId);
@@ -463,7 +472,7 @@ namespace DBModel.Services
             {
                 // relationship validation
                 var nowDate = DateTime.Now.Date;
-                if (_dbContext.Records.Any(x => x.Create == nowDate && x.FieldId == fieldId && x.Id != recordId))
+                if (_dbContext.Records.Any(x => DbFunctions.TruncateTime(x.Create) == nowDate && x.FieldId == fieldId && x.Id != recordId))
                 {
                     throw new ClientException("the specified field has been fill today");
                 }
@@ -476,6 +485,14 @@ namespace DBModel.Services
                 record.TurnOver = turnover;
                 record.Detail = detail;
                 _dbContext.SaveChanges();
+
+                // update the field's TurnOver if turnover from UI is true
+                if (turnover)
+                {
+                    this.UpdateField(fieldId, field.Name, field.Destination, field.Start, field.End, field.ProjectId, field.Parent, nowDate);
+                }
+
+                return record;
             }
         }
         #endregion

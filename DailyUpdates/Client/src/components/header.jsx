@@ -72,7 +72,7 @@ export default class DUHeader extends React.Component {
                         <Link to="/records/new"><Icon type="edit"/></Link>
                     </span>
                     }
-                    <span className={classNames('userName', styles.userName)}>{this.props.me ? this.props.me.Name : ''}</span>
+                    <span className={classNames('userName', styles.userName)}><Link to="/me/today">{this.props.me ? this.props.me.Name : ''}</Link></span>
                 </div>
             </Header>
         )
