@@ -23,7 +23,7 @@ export default class ProjectsPage extends React.Component {
             return (
                 <div className={classNames('projectsWrap loading', styles.projectsWrap)}>
                     <h2 className={classNames('pageTitle', styles.pageTitle)}>Projects</h2>
-                    <Spin/>
+                    <Spin className={styles.pageSpin}/>
                 </div>
             )
         }
@@ -37,7 +37,7 @@ export default class ProjectsPage extends React.Component {
         ))
 
         const addBtn = this.props.me && this.props.me.IsOwner
-        ? (<Col className={classNames('gutter-row', styles.projectCol)} span="8" key="add">
+        ? (<Col className={classNames('gutter-row', styles.projectCol, styles.projectAdd)} span="8" key="add">
                 <Link to="projects/new">
                     <Card className="gutter-box" title="Add New">
                         <Icon type="plus"/>

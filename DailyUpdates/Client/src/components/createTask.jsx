@@ -2,9 +2,11 @@ import React, { PropTypes }                         from 'react'
 import { Link }                                     from 'react-router'
 import classNames                                   from 'classnames'
 import styles                                       from '../styles/app.scss'
-import { Spin, Card, Col, Row, Icon, Form, Input, Button, message }               from 'antd'
+import { Spin, Card, Col, Row, Icon, Form, Input, Button, message, Select, DatePicker }               from 'antd'
 
+const Option = Select.Option
 const FormItem = Form.Item
+const RangePicker = DatePicker.RangePicker
 
 message.config({
     top: 75,
@@ -13,9 +15,24 @@ message.config({
 
 export default class CreateTaskPage extends React.Component {
 
+    static propTypes = {
+        name: PropTypes.string,
+        destination: PropTypes.string,
+        projectId: PropTypes.number,
+        parentId: PropTypes.number,
+        startDate: PropTypes.string,
+        endDate: PropTypes.string,
+        submitting: PropTypes.bool,
+        prepared: PropTypes.bool
+    }
+
     state = {
         name: '',
-        description: '',
+        destination: '',
+        projectId: 0,
+        parentId: 0,
+        startDate: '',
+        endDate: '',
         submitting: false,
         prepared: false
     }
@@ -28,24 +45,55 @@ export default class CreateTaskPage extends React.Component {
 
     desInputChange = (e) => {
         this.setState({
-            description: e.target.value
+            destination: e.target.value
         })
     }
 
-    createProject = () => {
+    selectProject = (value) => {
+        const selectProjectId = parseInt(value)
+        if (this.props.topTasks.filter(topTask => topTask.ProjectId === selectProjectId).length === 0) {
+            this.setState({
+                parentId: 0
+            })
+        }
+        this.setState({
+            projectId: selectProjectId
+        })
+    }
+
+    selectParent = (value) => {
+        this.setState({
+            parentId: parseInt(value)
+        })
+    }
+
+    chooseDateRange = (date, dateString) => {
+        console.dir(date)
+        console.log(dateString)
+        this.setState({
+            startDate: dateString[0],
+            endDate: dateString[1]
+        })
+    }
+
+    createTaskField = () => {
         this.setState({
             submitting: true
         })
-        this.props.onCreateProject({
+        this.props.onCreateTaskField({
             Name: this.state.name,
-            Description: this.state.description
+            Destination: this.state.destination,
+            Parent: this.state.parentId,
+            ProjectId: this.state.projectId,
+            Start: this.state.startDate,
+            End: this.state.endDate
         })
         .then((ret) => {
-            message.success('Project create successfully.')
+            message.success('Task field create successfully.')
             this.setState({
                 submitting: false,
                 name: '',
-                description: ''
+                destination: ''
             })
         })
         .catch((err) => {
@@ -65,6 +113,14 @@ export default class CreateTaskPage extends React.Component {
         })
     }
 
+    componentWillReceiveProps (nextProps) {
+        if (nextProps.projects && !this.state.projectId) {
+            this.setState({
+                projectId: nextProps.projects[0].Id
+            })
+        }
+    }
+
     render () {
         if (!this.props.me || !this.props.me.IsAdmin) {
             return (
@@ -78,7 +134,7 @@ export default class CreateTaskPage extends React.Component {
         if (!this.state.prepared) {
             return (
                 <div className={classNames('createTaskWrap loading', styles.createTaskWrap)}>
-                    <Spin/>
+                    <Spin className={styles.pageSpin}/>
                 </div>
             )
         }
@@ -90,24 +146,65 @@ export default class CreateTaskPage extends React.Component {
 
         const btnWrapperCol = { span: 14, offset: 15 }
 
+        const projectSelection = this.props.projects.map((project) => {
+            return (
+                <Option key={project.Id} value={project.Id.toString()}>{project.Name}</Option>
+            )
+        })
+
+        let parentFieldSelection
+        if (this.props.topTasks.length === 0) {
+            parentFieldSelection = (
+                <Select defaultValue="0" style={{ width: 200 }} disabled={true}><Option key={0} value="0">N/A</Option></Select>
+            )
+        } else {
+            parentFieldSelection = (
+                <Select defaultValue="0" style={{ width: 200 }} value={this.state.parentId.toString()} onChange={this.selectParent}>
+                    <Option key={0} value="0">None</Option>
+                    {this.props.topTasks.filter(topTask => topTask.ProjectId === this.state.projectId).map((topTask) => {
+                        return (<Option key={topTask.Id} value={topTask.Id.toString()}>{topTask.Name}</Option>)
+                    })}
+                </Select>
+            )
+        }
+
         return (
-            <div className={classNames('projectsWrap', styles.projectsWrap)}>
+            <div className={classNames('createTaskWrap', styles.createTaskWrap)}>
                 <h2 className={classNames('pageTitle', styles.pageTitle)}>Create Task Field</h2>
                 <Form layout="horizontal">
                     <FormItem
-                        label="Project Name"
+                        label="Field Name"
                         {...formItemLayout}
                     >
                         <Input placeholder="" onChange={this.nameInputChange} disabled={this.state.submitting} value={this.state.name}/>
                     </FormItem>
                     <FormItem
-                        label="Project Description"
+                        label="Project"
                         {...formItemLayout}
                     >
-                        <Input type="textarea" placeholder="" onChange={this.desInputChange} rows={10} disabled={this.state.submitting} value={this.state.description}/>
+                        <Select defaultValue={this.props.projects[0].Id.toString()} style={{ width: 200 }} onChange={this.selectProject}>{projectSelection}</Select>
+                    </FormItem>
+                    <FormItem
+                        label="Parent Field"
+                        {...formItemLayout}
+                    >
+                        {parentFieldSelection}
+                        <span style={{marginLeft: 10}}>{this.state.parentId === 0 ? 'A top field will be created' : 'A sub field will be created'}</span>
+                    </FormItem>
+                    <FormItem
+                        label="Date Range"
+                        {...formItemLayout}
+                    >
+                        <RangePicker onChange={this.chooseDateRange} />
+                    </FormItem>
+                    <FormItem
+                        label="Field Destination"
+                        {...formItemLayout}
+                    >
+                        <Input type="textarea" placeholder="" onChange={this.desInputChange} rows={10} disabled={this.state.submitting} value={this.state.destination}/>
                     </FormItem>
                     <FormItem wrapperCol={btnWrapperCol}>
-                        <Button type="primary" size="large" style={{width: 120}} loading={this.state.submitting} disabled={this.state.name.length < 10 || !this.state.description} onClick={this.createProject}>Create</Button>
+                        <Button type="primary" size="large" style={{width: 120}} loading={this.state.submitting} disabled={this.state.name.length < 5 || !this.state.destination || !this.state.projectId || !this.state.startDate || !this.state.endDate} onClick={this.createTaskField}>Create</Button>
                     </FormItem>
                 </Form>
             </div>

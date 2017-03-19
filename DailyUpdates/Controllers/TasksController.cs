@@ -29,40 +29,25 @@ namespace DailyUpdates.Controllers
             return JArray.FromObject(topTasks);
         }
 
-        // GET: api/Projects/5
-        public string Get(int id)
+        [Route("")]
+        public JArray GetTasks()
         {
-            return "value";
+            List<Field> tasks = _modelsManager.GetFields(null).ToList();
+            return JArray.FromObject(tasks);
         }
 
         [HttpPost]
         [Route("")]
-        [ResponseType(typeof(JObject))]
-        public HttpResponseMessage CreateTask(HttpRequestMessage request, [FromBody]Project project)
+        public HttpResponseMessage CreateTask([FromBody]Field field)
         {
             try
             {
-                Project newProject = _modelsManager.AddProject(project.Name, project.Description);
-                // return JObject.FromObject(newProject);
-                return request.CreateResponse(HttpStatusCode.OK, JObject.FromObject(newProject));
+                Field newField = _modelsManager.AddField(field.Name, field.Destination, field.Start.Date, field.End.Date, field.ProjectId, field.Parent);
+                return new Response(JObject.FromObject(newField));
             }
             catch (Exception ex)
             {
-                if (ex is ClientException)
-                {
-                    var responseMsg = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                    responseMsg.Content = new StringContent(ex.Message);
-                    // responseMsg.ReasonPhrase = ex.Message;
-                    // throw new HttpResponseException(responseMsg);
-                    return responseMsg;
-                }
-                else
-                {
-                    var responseMsg = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                    responseMsg.ReasonPhrase = ex.Message;
-                    // throw new HttpResponseException(responseMsg);
-                    return responseMsg;
-                }
+                return new Response(ex);
             }
         }
 

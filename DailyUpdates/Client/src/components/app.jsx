@@ -26,7 +26,7 @@ export default class App extends React.Component {
                     <div style={{ background: '#fff', padding: 24, minHeight: 400 }}>{this.props.children}</div>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
-                Scheduling Daily ©2017 AspenTech
+                Scheduling Daily © 2017 AspenTech
                 </Footer>
             </div>
         )

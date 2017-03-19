@@ -40,5 +40,8 @@ namespace DBModel.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public DateTime End { get; set; }
 
+        [Column("TURNOVER", Order = 7)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public DateTime? TurnOver { get; set; }
     }
 }

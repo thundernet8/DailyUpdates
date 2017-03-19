@@ -24,7 +24,7 @@ namespace ConsoleTest
         {
             try
             {
-                var modelsManager = new ModelsManager(null);
+                var modelsManager = new ModelsManager(Name);
                 modelsManager.AddOwner("Xueqian", Name);
             }
             catch(Exception ex)
@@ -51,7 +51,7 @@ namespace ConsoleTest
             try
             {
                 var modelsManager = new ModelsManager(Name);
-                modelsManager.AddRecord(2, "destination strings", null, "detail string");
+                modelsManager.AddRecord(2, "destination strings", false, "detail string");
             }
             catch (Exception ex)
             {
@@ -64,7 +64,7 @@ namespace ConsoleTest
             try
             {
                 var modelsManager = new ModelsManager(Name);
-                modelsManager.UpdateRecord(1, 2, "destination strings modified", null, "detail string 12313141515156");
+                modelsManager.UpdateRecord(1, 2, "destination strings modified", false, "detail string 12313141515156");
             }
             catch (Exception ex)
             {

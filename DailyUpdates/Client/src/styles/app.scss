@@ -3,15 +3,6 @@
     margin: 0 auto;
 }
 
-.pageTitle {
-    font-size: 30px;
-    font-weight: 500;
-    text-align: center;
-    padding: 20px 0;
-    margin-bottom: 30px;
-    text-transform: uppercase;
-}
-
 .logo {
     width: 188px;
     float: left;
@@ -23,17 +14,85 @@
 
 .profile {
     position: absolute;
-    width: 100px;
+    width: 150px;
     top: 0;
     right: 0;
+    .createRecord {
+        width: 50px;
+        display: inline-block;
+        color: #fff;
+        font-size: 20px;
+        float: left;
+        text-align: center;
+        cursor: pointer;
+        a {
+            color: #fff;
+        }
+    }
+
     .userName {
         color: #fff;
+        float: left;
+    }
+}
+
+.pageTitle {
+    font-size: 30px;
+    font-weight: 500;
+    text-align: center;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+}
+
+.fieldTitle {
+    font-size: 24px;
+    font-weight: 500;
+    text-align: center;
+    padding: 15px 0;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    text-transform: capitalize;
+}
+
+.pageSpin {
+    position: relative !important;
+    top: 100px;
+    left: 50%;
+    margin-left: -10px;
+}
+
+._404Page {
+    h1 {
+        color: #108ee9;
+        font-size: 120px;
+        font-weight: 500;
+        text-align: center;
+        margin-top: 100px;
     }
 }
 
 .projectsWrap {
     .projectCol {
         margin-bottom: 30px;
+        >div {
+            min-height: 150px;
+        }
+    }
+    .projectAdd {
+        position: relative;
+        i {
+            position: relative;
+            left: 50%;
+            margin-left: -15px;
+            margin-top: 10px;
+            font-size: 30px;
+        }
+        >a{
+            >div {
+                min-height: 150px;
+            }
+        }
     }
 }
 
@@ -44,6 +103,9 @@
     }
     .topFieldPanel {
         position: relative;
+        >h3 {
+            padding: 10px;
+        }
         >p {
             font-size: 14px;
             padding: 10px;
@@ -60,4 +122,11 @@
             }
         }
     }
+    .projectGroupContent {
+        position: relative;
+    }
+}
+
+.createRecordWrap {
+    position: relative;
 }

@@ -43,12 +43,22 @@ namespace DBModel.Models
                 return Role == UserRole.Owner || Role == UserRole.Admin;
             }
         }
+
+        [NotMapped]
+        public bool IsMember
+        {
+            get
+            {
+                return Role == UserRole.Owner || Role == UserRole.Admin || Role == UserRole.User;
+            }
+        }
     }
 
     public enum UserRole
     {
         Owner,
         Admin,
-        User
+        User,
+        Guest
     }
 }

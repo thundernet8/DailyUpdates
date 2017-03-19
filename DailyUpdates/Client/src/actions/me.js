@@ -8,7 +8,7 @@ export const getCurrentUser = () => {
         })
 
         const meApi = CONSTANTS.USERS_API + '/me'
-        axios.get(meApi)
+        return axios.get(meApi)
             .then((ret) => {
                 console.log(ret)
                 dispatch({
@@ -17,11 +17,13 @@ export const getCurrentUser = () => {
                 })
             })
             .catch((err) => {
-                console.log(err)
+                console.dir(err)
+                const error = new Error(err.response.data.error)
                 dispatch({
                     type: CONSTANTS.GET_CURRENT_USER_FAIL,
-                    err
+                    err: error
                 })
+                throw error
             })
     }
 }

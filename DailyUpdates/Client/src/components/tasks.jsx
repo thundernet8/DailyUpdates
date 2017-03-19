@@ -17,7 +17,7 @@ export default class TasksPage extends React.Component {
             return null
         }
         return (
-            <Collapse defaultActiveKey={[subFields[0].Id.toString()]}>
+            <Collapse defaultActiveKey={[subFields[0].Id.toString()]} accordion>
                 {subFields.map((subField) => {
                     const header = <div>{subField.Name}<Link to={`tasks/edit/${subField.Id}`}><Button type="default" icon="edit" onClick={this.editBtnClick}>Edit</Button></Link></div>
                     return (
@@ -31,26 +31,50 @@ export default class TasksPage extends React.Component {
     }
 
     componentWillMount () {
-        this.props.onGetTopTasks()
+        this.props.onPrepareData()
     }
 
     render () {
-        if (!this.props.topTasks) {
+        if (!this.props.topTasks || !this.props.projects) {
             return (
                 <div className={classNames('tasksWrap loading', styles.tasksWrap)}>
                     <h2 className={classNames('pageTitle', styles.pageTitle)}>Task Fields</h2>
-                    <Spin/>
+                    <Spin className={styles.pageSpin}/>
                 </div>
             )
         }
 
-        const taskTabs = this.props.topTasks.map(topTask => (
-            <TabPane className={styles.topFieldPanel} tab={topTask.Name} key={topTask.Id}>
-                <h3>{topTask.Destination}</h3>
-                <p className={styles.tips}>{`This top task field has ${topTask.SubFields ? topTask.SubFields.length : 0} sub fields`}</p>
-                {this.renderSubTasks(topTask.SubFields)}
-            </TabPane>
-        ))
+        const projectGroupedTasks = {}
+        this.props.projects.forEach((project) => {
+            projectGroupedTasks['_' + project.Id] = {project, topTasks: []}
+        })
+        this.props.topTasks.forEach((topTask) => {
+            if (projectGroupedTasks.hasOwnProperty('_' + topTask.ProjectId)) {
+                projectGroupedTasks['_' + topTask.ProjectId].topTasks.push(topTask)
+            }
+        })
+
+        const projectGroups = Object.values(projectGroupedTasks).map((group) => {
+            if (group.topTasks.length < 1) {
+                return null
+            }
+            return (
+                <div key={group.project.Id} className={styles.projectGroup}>
+                    <h3 className={styles.fieldTitle}>{group.project.Name}</h3>
+                    <div className={styles.projectGroupContent}>
+                        <Tabs defaultActiveKey={group.topTasks[0].Id.toString()}>
+                            {group.topTasks.map(topTask => (
+                                <TabPane className={styles.topFieldPanel} tab={topTask.Name} key={topTask.Id}>
+                                    <h3>{topTask.Destination}</h3>
+                                    <p className={styles.tips}>This top task field has <b>{topTask.SubFields ? topTask.SubFields.length : 0}</b> sub fields</p>
+                                    {this.renderSubTasks(topTask.SubFields)}
+                                </TabPane>
+                            ))}
+                        </Tabs>
+                    </div>
+                </div>
+            )
+        })
 
         const addBtn = this.props.me && this.props.me.IsOwner
         ? (<div className={classNames('addTaskBtn', styles.addTaskBtn)}>
@@ -62,9 +86,7 @@ export default class TasksPage extends React.Component {
             <div className={classNames('tasksWrap', styles.tasksWrap)}>
                 <h2 className={classNames('pageTitle', styles.pageTitle)}>Task Fields</h2>
                 {addBtn}
-                <Tabs defaultActiveKey="1">
-                    {taskTabs}
-                </Tabs>
+                {projectGroups}
             </div>
         )
     }

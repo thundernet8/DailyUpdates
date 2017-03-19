@@ -19,42 +19,74 @@ export const getTopTasks = () => {
                 return ret.data
             })
             .catch((err) => {
-                console.log(err)
+                console.dir(err)
+                const error = new Error(err.response.data.error)
                 dispatch({
                     type: CONSTANTS.GET_TOP_TASKS_FAIL,
-                    err
+                    err: error
                 })
 
-                throw new Error(err)
+                throw error
             })
     }
 }
 
-// export const createTask = (data) => {
-//     return (dispatch) => {
-//         dispatch({
-//             type: CONSTANTS.CREATE_PROJECT
-//         })
+export const getTasks = () => {
+    return (dispatch) => {
+        dispatch({
+            type: CONSTANTS.GET_TASKS
+        })
 
-//         const api = CONSTANTS.PROJECTS_API
-//         return axios.post(api, data)
-//             .then((ret) => {
-//                 console.log(ret)
-//                 dispatch({
-//                     type: CONSTANTS.CREATE_PROJECT_SUCCESS,
-//                     project: ret.data
-//                 })
+        const api = CONSTANTS.TASKS_API
+        return axios.get(api)
+            .then((ret) => {
+                console.log(ret)
+                dispatch({
+                    type: CONSTANTS.GET_TASKS_SUCCESS,
+                    tasks: ret.data
+                })
 
-//                 return ret.data
-//             })
-//             .catch((err) => {
-//                 console.log(err)
-//                 dispatch({
-//                     type: CONSTANTS.CREATE_PROJECT_FAIL,
-//                     err
-//                 })
+                return ret.data
+            })
+            .catch((err) => {
+                console.dir(err)
+                const error = new Error(err.response.data.error)
+                dispatch({
+                    type: CONSTANTS.GET_TASKS_FAIL,
+                    err: error
+                })
 
-//                 throw new Error(err)
-//             })
-//     }
-// }
+                throw error
+            })
+    }
+}
+
+export const createTask = (data) => {
+    return (dispatch) => {
+        dispatch({
+            type: CONSTANTS.CREATE_TASK
+        })
+
+        const api = CONSTANTS.TASKS_API
+        return axios.post(api, data)
+            .then((ret) => {
+                console.log(ret)
+                dispatch({
+                    type: CONSTANTS.CREATE_TASK_SUCCESS,
+                    task: ret.data
+                })
+
+                return ret.data
+            })
+            .catch((err) => {
+                console.dir(err)
+                const error = new Error(err.response.data.error)
+                dispatch({
+                    type: CONSTANTS.CREATE_TASK_FAIL,
+                    err: error
+                })
+
+                throw error
+            })
+    }
+}

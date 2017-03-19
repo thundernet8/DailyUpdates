@@ -9,5 +9,12 @@ namespace DBModel.Models
     public class TopField : Field
     {
         public ICollection<Field> SubFields { get; set; }
+
+        public new DateTime? TurnOver {
+            get
+            {
+                return null;
+            }
+        }
     }
 }

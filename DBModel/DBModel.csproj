@@ -62,7 +62,6 @@
     <Compile Include="Services\ClientException.cs" />
     <Compile Include="Services\ModelsManager.cs" />
     <Compile Include="Services\ServerException.cs" />
-    <Compile Include="Services\UserHelper.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>

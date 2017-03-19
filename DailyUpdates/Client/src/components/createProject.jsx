@@ -58,7 +58,7 @@ export default class CreateProjectPage extends React.Component {
     render () {
         if (!this.props.me || !this.props.me.IsOwner) {
             return (
-                <div className={classNames('createPrjectWrap err', styles.createPrjectWrap)}>
+                <div className={classNames('createProjectWrap err', styles.createProjectWrap)}>
                     <h2 className={classNames('pageTitle', styles.pageTitle)}>Create Project</h2>
                     <h3><Icon type="frown-o" />Only Site Owner Can Create A Project.</h3>
                 </div>
@@ -73,7 +73,7 @@ export default class CreateProjectPage extends React.Component {
         const btnWrapperCol = { span: 14, offset: 15 }
 
         return (
-            <div className={classNames('projectsWrap', styles.projectsWrap)}>
+            <div className={classNames('createProjectWrap', styles.createProjectWrap)}>
                 <h2 className={classNames('pageTitle', styles.pageTitle)}>Create Project</h2>
                 <Form layout="horizontal">
                     <FormItem
@@ -89,7 +89,7 @@ export default class CreateProjectPage extends React.Component {
                         <Input type="textarea" placeholder="" onChange={this.desInputChange} rows={10} disabled={this.state.submitting} value={this.state.description}/>
                     </FormItem>
                     <FormItem wrapperCol={btnWrapperCol}>
-                        <Button type="primary" size="large" style={{width: 120}} loading={this.state.submitting} disabled={this.state.name.length < 10 || !this.state.description} onClick={this.createProject}>Create</Button>
+                        <Button type="primary" size="large" style={{width: 120}} loading={this.state.submitting} disabled={this.state.name.length < 5 || !this.state.description} onClick={this.createProject}>Create</Button>
                     </FormItem>
                 </Form>
             </div>

@@ -17,14 +17,28 @@ namespace DBModel.Services
         {
             using (var _dbContext = new DailyReportsContext())
             {
-                _currentUser = _dbContext.Users.Where(x => x.DomainName == domainName).FirstOrDefault();
+                var existUser = _dbContext.Users.Where(x => x.DomainName == domainName).FirstOrDefault();
+                if (existUser != null)
+                {
+                    _currentUser = existUser;
+                }
+                else
+                {
+                    _currentUser = new User()
+                    {
+                        Name = domainName.Split('\\')[1],
+                        DomainName = domainName,
+                        Role = UserRole.Guest,
+                        Id = 0
+                    };
+                }
             }
         }
 
         #region Utilities
         public void RequireOwnerAccess()
         {
-            if (_currentUser == null || !_currentUser.IsOwner())
+            if (_currentUser == null || !_currentUser.IsOwner)
             {
                 throw new ClientException("Not allowed to do this as you are not a site owner");
             }
@@ -32,7 +46,7 @@ namespace DBModel.Services
 
         public void RequireAdminAccess()
         {
-            if (_currentUser == null || !_currentUser.IsAdmin())
+            if (_currentUser == null || !_currentUser.IsAdmin)
             {
                 throw new ClientException("Not allowed to do this as you are not a administrator");
             }
@@ -147,6 +161,18 @@ namespace DBModel.Services
             }
         }
 
+        public ICollection<Record> GetMyRecords(DateTime? date)
+        {
+            if (date == null)
+            {
+                date = DateTime.Now.Date;
+            }
+            using (var _dbContext = new DailyReportsContext())
+            {
+                return _dbContext.Set<Record>().Where(x => x.Create == date && x.Uid == _currentUser.Id).OrderBy(x => x.Id).ToList();
+            }
+        }
+
         public Record GetRecord(int id)
         {
             using (var _dbContext = new DailyReportsContext())
@@ -249,7 +275,7 @@ namespace DBModel.Services
         }
         #endregion
 
-        #region Insert Field
+        #region Insert/Update Field
         public Field AddField(string name, string destination, DateTime start, DateTime end, int projectId, int parent = 0)
         {
             RequireAdminAccess();
@@ -301,10 +327,63 @@ namespace DBModel.Services
                 return field;
             }
         }
+
+        public Field UpdateField(int fieldId, string name, string destination, DateTime start, DateTime end, int projectId, int parent = 0, DateTime? turnover = null)
+        {
+            RequireAdminAccess();
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ClientException("field name must be provided");
+            }
+            if (parent != 0 && string.IsNullOrWhiteSpace(destination))
+            {
+                throw new ClientException("sub field must have a destination for sample usage");
+            }
+
+            var project = GetProject(projectId);
+
+            if (project == null)
+            {
+                throw new ClientException("project you specified is not exist");
+            }
+
+            Field parentField = null;
+            if (parent != 0)
+            {
+                parentField = GetField(parent);
+                if (parentField == null) throw new ClientException("the parent field you specified is not exist");
+
+                projectId = parentField.ProjectId; // sub field must have same project id with parent
+            }
+
+
+            using (var _dbContext = new DailyReportsContext())
+            {
+                var field = _dbContext.Fields.Where(x => x.Id == fieldId).FirstOrDefault();
+                if (field == null)
+                {
+                    throw new ClientException("The specified field is not existed");
+                }
+                field.Name = name;
+                field.Destination = destination;
+                field.Start = start.Date;
+                field.End = end.Date;
+                field.Parent = parent;
+                field.ProjectId = projectId;
+                if (turnover != null)
+                {
+                    field.TurnOver = ((DateTime)turnover).Date;
+                }
+
+                _dbContext.SaveChanges();
+
+                return field;
+            }
+        }
         #endregion
 
         #region Insert/Update Record
-        public Record AddRecord(int fieldId, string destination, DateTime? turnover, string detail)
+        public Record AddRecord(int fieldId, string destination, bool turnover, string detail)
         {
             RequireMemberAccess();
             var user = GetUser(_currentUser.Id);
@@ -327,12 +406,11 @@ namespace DBModel.Services
 
             using (var _dbContext = new DailyReportsContext())
             {
-                var r = _dbContext.Records.ToList();
                 var nowDate = DateTime.Now.Date;
                 // relationship validation
                 if (_dbContext.Records.Any(x => x.Create == nowDate && x.FieldId == fieldId))
                 {
-                    throw new ClientException("the specified field has been fill today");
+                    throw new ClientException("the specified field has been filled today");
                 }
 
                 var record = _dbContext.Records.Add(new Record()
@@ -345,18 +423,24 @@ namespace DBModel.Services
                 });
                 _dbContext.SaveChanges();
 
+                // update the field's TurnOver if turnover from UI is true
+                if (turnover)
+                {
+                    this.UpdateField(fieldId, field.Name, field.Destination, field.Start, field.End, field.ProjectId, field.Parent, nowDate);
+                }
+
                 return record;
             }
         }
 
-        public void UpdateRecord(int recordId, int fieldId, string destination, DateTime? turnover, string detail)
+        public void UpdateRecord(int recordId, int fieldId, string destination, bool turnover, string detail)
         {
             RequireMemberAccess();
             var record = GetRecord(recordId);
             if (record == null)
             {
                 throw new ClientException("the specified record is not exist");
-            } else if (record.Uid != _currentUser.Id && !_currentUser.IsAdmin())
+            } else if (record.Uid != _currentUser.Id && !_currentUser.IsAdmin)
             {
                 throw new ClientException("you cannot edit other's record");
             }
@@ -389,10 +473,7 @@ namespace DBModel.Services
                 record.Update = DateTime.Now;
                 record.UpdateBy = _currentUser.Id;
                 record.Destination = destination;
-                if (turnover != null)
-                {
-                    record.TurnOver = ((DateTime)turnover).Date;
-                }
+                record.TurnOver = turnover;
                 record.Detail = detail;
                 _dbContext.SaveChanges();
             }

@@ -143,7 +143,7 @@ namespace DBModel.Services.Tests
             try
             {
                 var modelsManager = new ModelsManager("CORP\\wuxu");
-                modelsManager.AddRecord(2, "destination strings", null, "detail string");
+                modelsManager.AddRecord(2, "destination strings", false, "detail string");
             }
             catch (Exception ex)
             {
@@ -164,7 +164,7 @@ namespace DBModel.Services.Tests
             try
             {
                 var modelsManager = new ModelsManager("CORP\\wuxu");
-                modelsManager.UpdateRecord(1, 2, "destination strings modified", null, "detail string 12313141515156");
+                modelsManager.UpdateRecord(1, 2, "destination strings modified", false, "detail string 12313141515156");
             }
             catch (Exception ex)
             {

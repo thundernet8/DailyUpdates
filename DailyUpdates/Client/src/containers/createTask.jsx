@@ -8,7 +8,7 @@ const mapStateToProps = (state) => {
   return {
       me: state.me,
       projects: state.projects,
-      topFields: state.topFields
+      topTasks: state.topTasks
   }
 }
 
@@ -19,7 +19,7 @@ const mapDispatchToProps = (dispatch) => {
               [dispatch(Actions.getAllProjects()), dispatch(Actions.getTopTasks())]
           )
       },
-      onCreateTask: (data) => {
+      onCreateTaskField: (data) => {
           return dispatch(Actions.createTask(data))
       }
   }

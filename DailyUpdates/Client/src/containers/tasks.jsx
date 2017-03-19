@@ -6,14 +6,17 @@ import Actions                      from '../actions'
 const mapStateToProps = (state) => {
   return {
       topTasks: state.topTasks,
+      projects: state.projects,
       me: state.me
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-      onGetTopTasks: () => {
-          return dispatch(Actions.getTopTasks())
+      onPrepareData: () => {
+          return Promise.all(
+              [dispatch(Actions.getAllProjects()), dispatch(Actions.getTopTasks())]
+          )
       }
   }
 }

@@ -40,13 +40,12 @@ namespace DBModel.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int? UpdateBy { get; set; } = 0;
 
-        [Column("TURNOVER", Order = 7)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public DateTime? TurnOver { get; set; }
-
-        [Column("DETAIL", Order = 8)]
+        [Column("DETAIL", Order = 7)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string Detail { get; set; }
+
+        [NotMapped]
+        public bool TurnOver { get; set; }
 
         [NotMapped]
         public string UserName { get; set; }
