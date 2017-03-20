@@ -61,6 +61,7 @@ namespace DBModel.Services
         }
         #endregion
 
+        #region User
         public ICollection<User> GetUsers()
         {
             using(var _dbContext = new DailyReportsContext())
@@ -89,7 +90,9 @@ namespace DBModel.Services
                 return _dbContext.Users.Where(x => x.DomainName == domainName).FirstOrDefault();
             }
         }
+        #endregion
 
+        #region Get Projects
         public ICollection<Project> GetProjects()
         {
             using (var _dbContext = new DailyReportsContext())
@@ -105,7 +108,9 @@ namespace DBModel.Services
                 return _dbContext.Set<Project>().Find(id);
             }
         }
+        #endregion
 
+        #region Get Fields
         public ICollection<Field> GetFields(DateTime? date)
         {
             if (date == null)
@@ -148,7 +153,9 @@ namespace DBModel.Services
                 return _dbContext.Set<Field>().Find(id);
             }
         }
+        #endregion
 
+        #region Get Records
         public ICollection<Record> GetRecords(DateTime? date)
         {
             if (date == null)
@@ -188,22 +195,31 @@ namespace DBModel.Services
                 return _dbContext.Set<Record>().Where(x => x.Uid == _currentUser.Id && x.Id == id).FirstOrDefault();
             }
         }
+        #endregion
 
-        public DayActivities GetDayActivities(DateTime? date)
+        #region Activities
+        public DayActivities GetDayActivities(DateTime? date = null)
         {
             if (date == null)
             {
                 date = DateTime.Now.Date;
             }
+            else
+            {
+                date = ((DateTime)date).Date;
+            }
             DayActivities dayActivities = new DayActivities()
             {
                 Day = (DateTime)date,
                 TopFields = GetTopFields(date),
-                Records = GetRecords(date)
+                Records = GetRecords(date),
+                Users = GetUsers(),
+                Projects = GetProjects()
             };
 
             return dayActivities;
         }
+        #endregion
 
         #region Insert User
         public User AddOwner(string name, string domainName)
@@ -220,7 +236,8 @@ namespace DBModel.Services
                 {
                     Name = name,
                     DomainName = domainName,
-                    Role = UserRole.Owner
+                    Role = UserRole.Owner,
+                    Create = DateTime.Now
                 });
 
                 _dbContext.SaveChanges();
@@ -249,7 +266,8 @@ namespace DBModel.Services
                 {
                     Name = name,
                     DomainName = domainName,
-                    Role = role
+                    Role = role,
+                    Create = DateTime.Now
                 });
 
                 _dbContext.SaveChanges();
@@ -315,7 +333,7 @@ namespace DBModel.Services
 
             using (var _dbContext = new DailyReportsContext())
             {
-                var exist = _dbContext.Fields.Any(x => x.Name == name);
+                var exist = _dbContext.Fields.Any(x => x.Name == name && x.ProjectId == projectId);
                 if (exist)
                 {
                     throw new ClientException("The field is existed");

@@ -8,11 +8,21 @@ export const USERS_API = API_V1_BASE + '/users'
 export const PROJECTS_API = API_V1_BASE + '/projects'
 export const TASKS_API = API_V1_BASE + '/tasks'
 export const RECORDS_API = API_V1_BASE + '/records'
+export const ACTIVITIES_API = API_V1_BASE + '/activities'
 
 // current user
 export const GET_CURRENT_USER = 'GET_CURRENT_USER'
 export const GET_CURRENT_USER_SUCCESS = 'GET_CURRENT_USER_SUCCESS'
 export const GET_CURRENT_USER_FAIL = 'GET_CURRENT_USER_FAIL'
+
+// users
+export const GET_ALL_USERS = 'GET_ALL_USERS'
+export const GET_ALL_USERS_SUCCESS = 'GET_ALL_USERS_SUCCESS'
+export const GET_ALL_USERS_FAIL = 'GET_ALL_USERS_FAIL'
+
+export const CREATE_USER = 'CREATE_USER'
+export const CREATE_USER_SUCCESS = 'CREATE_USER_SUCCESS'
+export const CREATE_USER_FAIL = 'CREATE_USER_FAIL'
 
 // projects
 export const GET_PROJECTS = 'GET_PROJECTS'
@@ -52,3 +62,8 @@ export const UPDATE_RECORD_FAIL = 'UPDATE_RECORD_FAIL'
 export const GET_MY_RECORD = 'GET_MY_RECORD'
 export const GET_MY_RECORD_SUCCESS = 'GET_MY_RECORD_SUCCESS'
 export const GET_MY_RECORD_FAIL = 'GET_MY_RECORD_FAIL'
+
+// activities
+export const GET_ACTIVITIES = 'GET_ACTIVITIES'
+export const GET_ACTIVITIES_SUCCESS = 'GET_ACTIVITIES_SUCCESS'
+export const GET_ACTIVITIES_FAIL = 'GET_ACTIVITIES_FAIL'

@@ -69,6 +69,7 @@ img {
 
 p {
     word-wrap: break-word;
+    white-space: pre;
 }
 
 #app {
@@ -159,5 +160,38 @@ p {
 #app {
     .ant-tabs-nav-container {
         font-size: 16px;
+    }
+}
+
+.homeWrap {
+    .ant-table-wrapper {
+        margin-bottom: 50px;
+        .ant-table {
+            color: #222;
+        }
+        .ant-table-title {
+             font-size: 24px;
+            text-align: center;
+        }
+        th {
+            font-weight: 600;
+            font-size: 16px;
+            text-align: center;
+        }
+        .ant-table-thead > tr > th {
+            color: #666;
+        }
+        td {
+            white-space: pre-line;
+        }
+        td.firstCol {
+            font-weight: 600;
+            font-size: 15px;
+            color: #666;
+            text-align: center;
+        }
+        .centralCol {
+            text-align: center;
+        }
     }
 }

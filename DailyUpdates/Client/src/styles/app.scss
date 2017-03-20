@@ -1,5 +1,5 @@
 .container {
-    max-width: 1140px;
+    max-width: 1440px;
     margin: 0 auto;
 }
 
@@ -48,6 +48,15 @@
     text-transform: uppercase;
 }
 
+.pageSubTitle {
+    font-size: 20px;
+    text-align: center;
+    padding: 20px;
+    i {
+        margin-right: 5px;
+    }
+}
+
 .fieldTitle {
     font-size: 24px;
     font-weight: 500;
@@ -76,6 +85,8 @@
 }
 
 .projectsWrap {
+    max-width: 1140px;
+    margin: 0 auto;
     .projectCol {
         margin-bottom: 30px;
         >div {
@@ -100,6 +111,8 @@
 }
 
 .tasksWrap {
+    max-width: 1140px;
+    margin: 0 auto;
     .addTaskBtn {
         text-align: right;
         margin-bottom: 30px;
@@ -132,13 +145,19 @@
 
 .createRecordWrap {
     position: relative;
+    max-width: 1140px;
+    margin: 0 auto;
 }
 
 .editRecordWrap {
     position: relative;
+    max-width: 1140px;
+    margin: 0 auto;
 }
 
 .myTodayWrap {
+    max-width: 1140px;
+    margin: 0 auto;
     .recordPaneHead {
         font-size: 16px;
         >span {
@@ -161,5 +180,14 @@
         >div:first-child {
             font-weight: bold;
         }
+    }
+}
+
+.usersWrap {
+    max-width: 1140px;
+    margin: 0 auto;
+    .addUserBtn {
+        text-align: right;
+        margin-bottom: 20px;
     }
 }

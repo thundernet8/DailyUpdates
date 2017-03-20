@@ -114,7 +114,7 @@ export default class CreateTaskPage extends React.Component {
     }
 
     componentWillReceiveProps (nextProps) {
-        if (nextProps.projects && !this.state.projectId) {
+        if (nextProps.projects && nextProps.projects.length > 0 && !this.state.projectId) {
             this.setState({
                 projectId: nextProps.projects[0].Id
             })
@@ -126,7 +126,7 @@ export default class CreateTaskPage extends React.Component {
             return (
                 <div className={classNames('createTaskWrap err', styles.createTaskWrap)}>
                     <h2 className={classNames('pageTitle', styles.pageTitle)}>Create Task Field</h2>
-                    <h3><Icon type="frown-o" />Only Site Owner or Admin Can Create A Task Field.</h3>
+                    <h3 className={styles.pageSubTitle}><Icon type="frown-o" />Only Site Owner or Admin Can Create A Task Field.</h3>
                 </div>
             )
         }
@@ -135,6 +135,15 @@ export default class CreateTaskPage extends React.Component {
             return (
                 <div className={classNames('createTaskWrap loading', styles.createTaskWrap)}>
                     <Spin className={styles.pageSpin}/>
+                </div>
+            )
+        }
+
+        if (this.props.projects.length < 1) {
+            return (
+                <div className={classNames('createTaskWrap', styles.createTaskWrap)}>
+                    <h2 className={classNames('pageTitle', styles.pageTitle)}>Create Task Field</h2>
+                    <h3 className={styles.pageSubTitle}><Icon type="frown-o" />No project for adding tasks</h3>
                 </div>
             )
         }

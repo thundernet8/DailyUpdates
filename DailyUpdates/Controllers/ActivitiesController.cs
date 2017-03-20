@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using DBModel.DataContract;
+using DBModel.Models;
+using DBModel.Services;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,40 +11,44 @@ using System.Web.Http;
 
 namespace DailyUpdates.Controllers
 {
-    [RoutePrefix("api/v1")]
+    [Authorize]
+    [RoutePrefix("api/v1/activities")]
     public class ActivitiesController : ApiController
     {
-        // GET: api/Activities
-        [Route("test")]
-        public IEnumerable<string> Get()
+        private ModelsManager _modelsManager = null;
+
+        public ActivitiesController()
         {
-            return new string[] { "value1", "value2" };
+            _modelsManager = new ModelsManager(RequestContext.Principal.Identity.Name);
         }
 
-        // GET: api/Activities/5
-        [HttpGet]
-        [Route("gettest/{id:int}")]
-        public JObject GetTest(int id)
+        [Route("today")]
+        public HttpResponseMessage GetTodayActivities()
         {
-            return JObject.FromObject(new
+            try
             {
-                name = System.Web.HttpContext.Current.User.Identity.Name
-            });
+                DayActivities activities = _modelsManager.GetDayActivities();
+                return new Response(JObject.FromObject(activities));
+            }
+            catch(Exception ex)
+            {
+                return new Response(ex);
+            }
         }
 
-        // POST: api/Activities
-        public void Post([FromBody]string value)
+        [Route("{year:int}/{month:int}/{day:int}")]
+        public HttpResponseMessage GetActivitiesOfDate(int year, int month, int day)
         {
-        }
-
-        // PUT: api/Activities/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/Activities/5
-        public void Delete(int id)
-        {
+            try
+            {
+                DateTime date = new DateTime(year, month, day);
+                DayActivities activities = _modelsManager.GetDayActivities(date);
+                return new Response(JObject.FromObject(activities));
+            }
+            catch (Exception ex)
+            {
+                return new Response(ex);
+            }
         }
     }
 }

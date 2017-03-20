@@ -2,6 +2,9 @@
 using System.Web.Http;
 using System.Web;
 using DBModel.Services;
+using System.Net.Http;
+using System;
+using DBModel.Models;
 
 namespace DailyUpdates.Controllers
 {
@@ -18,7 +21,7 @@ namespace DailyUpdates.Controllers
 
         [HttpGet]
         [Route("me")]
-        public JObject GetCurrentUser()
+        public HttpResponseMessage GetCurrentUser()
         {
             
             var currentUser = _modelsManager.GetCurrentUser();
@@ -26,29 +29,48 @@ namespace DailyUpdates.Controllers
             {
                 return null;
             }
-            return JObject.FromObject(currentUser);
+            return new Response(JObject.FromObject(currentUser));
         }
 
-        // GET: api/Users/5
-        // [AllowAnonymous]
-        public string Get(int id)
+        [HttpGet]
+        [Route("")]
+        public HttpResponseMessage GetUsers()
         {
-            return "value";
+            try
+            {
+                var users = _modelsManager.GetUsers();
+                return new Response(JArray.FromObject(users));
+            }
+            catch(Exception ex)
+            {
+                return new Response(ex);
+            }
         }
 
-        // POST: api/Users
-        public void Post([FromBody]string value)
+        [HttpPost]
+        [Route("")]
+        public HttpResponseMessage CreateUser([FromBody]User user)
         {
-        }
-
-        // PUT: api/Users/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/Users/5
-        public void Delete(int id)
-        {
+            try
+            {
+                User newUser;
+                if (user.Role == UserRole.Admin)
+                {
+                    newUser = _modelsManager.AddOwner(user.Name, user.DomainName);
+                }
+                else if(user.Role == UserRole.Admin) {
+                    newUser = _modelsManager.AddAdmin(user.Name, user.DomainName);
+                }
+                else
+                {
+                    newUser = _modelsManager.AddUser(user.Name, user.DomainName);
+                }
+                return new Response(JObject.FromObject(newUser));
+            }
+            catch (Exception ex)
+            {
+                return new Response(ex);
+            }
         }
     }
 }

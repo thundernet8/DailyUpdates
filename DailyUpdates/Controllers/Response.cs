@@ -18,6 +18,12 @@ namespace DailyUpdates.Controllers
             this.Content = new ObjectContent<JObject>(jobject, new JsonMediaTypeFormatter(), "application/json");
         }
 
+        public Response(JArray jarray)
+            : base(HttpStatusCode.OK)
+        {
+            this.Content = new ObjectContent<JArray>(jarray, new JsonMediaTypeFormatter(), "application/json");
+        }
+
         public Response(Exception ex)
         {
             if (ex is ClientException)

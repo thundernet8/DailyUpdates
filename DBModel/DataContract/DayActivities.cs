@@ -16,5 +16,9 @@ namespace DBModel.DataContract
         //public ICollection<Field> SubFields { get; set; }
 
         public ICollection<Record> Records { get; set; }
+
+        public ICollection<User> Users { get; set; }
+
+        public ICollection<Project> Projects { get; set; }
     }
 }

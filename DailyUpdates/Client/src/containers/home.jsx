@@ -4,11 +4,20 @@ import Actions                      from '../actions'
 
 // Redux connection
 const mapStateToProps = (state) => {
-  return {}
+  return {
+      activities: state.activities
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {}
+  return {
+      onGetTodayActivities: () => {
+          return dispatch(Actions.getTodayActivities())
+      },
+      onGetActivitiesOfDate: (year, month, day) => {
+          return dispatch(Actions.getActivitiesOfDate(year, month, day))
+      }
+  }
 }
 
 // Which props to inject from the global atomic state

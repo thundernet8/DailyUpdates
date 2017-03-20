@@ -7,13 +7,13 @@ export const getCurrentUser = () => {
             type: CONSTANTS.GET_CURRENT_USER
         })
 
-        const meApi = CONSTANTS.USERS_API + '/me'
-        return axios.get(meApi)
+        const api = CONSTANTS.USERS_API + '/me'
+        return axios.get(api)
             .then((ret) => {
                 console.log(ret)
                 dispatch({
                     type: CONSTANTS.GET_CURRENT_USER_SUCCESS,
-                    user: ret.data
+                    me: ret.data
                 })
             })
             .catch((err) => {

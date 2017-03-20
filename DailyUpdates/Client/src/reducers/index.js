@@ -4,6 +4,8 @@ import { meReducer }                                      from './me'
 import { projectsReducer }                                from './projects'
 import { topTasksReducer, tasksReducer }                  from './tasks'
 import { myRecordsTodayReducer, myRecordReducer }         from './records'
+import { activitiesReducer }                              from './activities'
+import { usersReducer, createdUserReducer }               from './users'
 
 export default combineReducers({
     routing: routerReducer,
@@ -12,5 +14,8 @@ export default combineReducers({
     topTasks: topTasksReducer,
     tasks: tasksReducer,
     myRecords: myRecordsTodayReducer,
-    myRecord: myRecordReducer
+    myRecord: myRecordReducer,
+    activities: activitiesReducer,
+    users: usersReducer,
+    createdUser: createdUserReducer
 })

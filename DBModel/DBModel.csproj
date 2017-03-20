@@ -51,6 +51,15 @@
   <ItemGroup>
     <Compile Include="Database.cs" />
     <Compile Include="DataContract\DayActivities.cs" />
+    <Compile Include="Migrations\201703200147082_InitialCreate.cs" />
+    <Compile Include="Migrations\201703200147082_InitialCreate.Designer.cs">
+      <DependentUpon>201703200147082_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703200729517_AddUserCreateTime.cs" />
+    <Compile Include="Migrations\201703200729517_AddUserCreateTime.Designer.cs">
+      <DependentUpon>201703200729517_AddUserCreateTime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Action.cs" />
     <Compile Include="Models\DailyReportsContext.cs" />
     <Compile Include="Models\Project.cs" />
@@ -65,6 +74,12 @@
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Migrations\201703200147082_InitialCreate.resx">
+      <DependentUpon>201703200147082_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703200729517_AddUserCreateTime.resx">
+      <DependentUpon>201703200729517_AddUserCreateTime.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="App.config" />
     <EmbeddedResource Include="db.config">
       <SubType>Designer</SubType>

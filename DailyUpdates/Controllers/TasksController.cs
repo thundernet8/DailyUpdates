@@ -50,16 +50,5 @@ namespace DailyUpdates.Controllers
                 return new Response(ex);
             }
         }
-
-        // PUT: api/Projects/5
-        public void Put(int id, [FromBody]string value)
-        {
-
-        }
-
-        // DELETE: api/Projects/5
-        public void Delete(int id)
-        {
-        }
     }
 }

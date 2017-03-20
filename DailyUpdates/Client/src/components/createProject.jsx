@@ -60,7 +60,7 @@ export default class CreateProjectPage extends React.Component {
             return (
                 <div className={classNames('createProjectWrap err', styles.createProjectWrap)}>
                     <h2 className={classNames('pageTitle', styles.pageTitle)}>Create Project</h2>
-                    <h3><Icon type="frown-o" />Only Site Owner Can Create A Project.</h3>
+                    <h3 className={styles.pageSubTitle}><Icon type="frown-o" />Only Site Owner Can Create A Project.</h3>
                 </div>
             )
         }

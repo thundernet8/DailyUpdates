@@ -28,6 +28,10 @@ namespace DBModel.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public UserRole Role { get; set; } = UserRole.User;
 
+        [Column("CREATE", Order = 4)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public DateTime Create { get; set; }
+
         [NotMapped]
         public bool IsOwner {
             get
@@ -50,6 +54,25 @@ namespace DBModel.Models
             get
             {
                 return Role == UserRole.Owner || Role == UserRole.Admin || Role == UserRole.User;
+            }
+        }
+
+        [NotMapped]
+        public string RoleStr
+        {
+            get
+            {
+                switch (this.Role)
+                {
+                    case UserRole.Owner:
+                        return "Owner";
+                    case UserRole.Admin:
+                        return "Admin";
+                    case UserRole.User:
+                        return "Member";
+                    default:
+                        return "Guest";
+                }
             }
         }
     }

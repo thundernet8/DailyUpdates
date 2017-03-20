@@ -109,7 +109,7 @@ export default class CreateRecordPage extends React.Component {
             return (
                 <div className={classNames('createRecordWrap err', styles.createRecordWrap)}>
                     <h2 className={classNames('pageTitle', styles.pageTitle)}>Create Record</h2>
-                    <h3><Icon type="frown-o" />Only Member Can Create A Record.</h3>
+                    <h3 className={styles.pageSubTitle}><Icon type="frown-o" />Only Member Can Create A Record.</h3>
                 </div>
             )
         }
@@ -126,7 +126,7 @@ export default class CreateRecordPage extends React.Component {
             return (
                 <div className={classNames('createRecordWrap', styles.createRecordWrap)}>
                     <h2 className={classNames('pageTitle', styles.pageTitle)}>Create Record</h2>
-                    <h3><Icon type="frown-o" />No task fields for adding records</h3>
+                    <h3 className={styles.pageSubTitle}><Icon type="frown-o" />No task fields for adding records</h3>
                 </div>
             )
         }
