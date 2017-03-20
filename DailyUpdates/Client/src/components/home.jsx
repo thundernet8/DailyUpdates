@@ -2,12 +2,21 @@ import React, { PropTypes }                         from 'react'
 import { Link }                                     from 'react-router'
 import classNames                                   from 'classnames'
 import styles                                       from '../styles/app.scss'
-import { Spin, Table }                                     from 'antd'
+import { Spin, Table, DatePicker }                                     from 'antd'
+
+const { MonthPicker } = DatePicker
 
 export default class HomePage extends React.Component {
 
     state = {
         loading: true
+    }
+
+    onPickDate = (date, dateString) => {
+        if (date) {
+            const route = `/${date.year()}/${date.month() + 1}/${date.date()}`
+            this.props.router.push(route)
+        }
     }
 
     groupDataByProject = () => {
@@ -203,6 +212,7 @@ export default class HomePage extends React.Component {
 
         return (
             <div className={classNames('homeWrap loading', styles.homeWrap)}>
+                <DatePicker className={styles.homeDatePicker} onChange={this.onPickDate} />
                 {headTitle}
                 {tables}
             </div>

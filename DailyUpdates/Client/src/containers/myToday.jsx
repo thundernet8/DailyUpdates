@@ -7,6 +7,7 @@ const mapStateToProps = (state) => {
   return {
       me: state.me,
       myRecords: state.myRecords,
+      myActions: state.myActions,
       tasks: state.tasks
   }
 }
@@ -15,7 +16,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
       onPrepareData: () => {
           return Promise.all(
-              [dispatch(Actions.getMyRecordsToday()), dispatch(Actions.getTasks())]
+              [dispatch(Actions.getMyRecordsToday()), dispatch(Actions.getTasks()), dispatch(Actions.getMyActions())]
           )
       }
   }

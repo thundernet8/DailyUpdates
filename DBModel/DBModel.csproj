@@ -59,6 +59,10 @@
     <Compile Include="Migrations\201703200729517_AddUserCreateTime.Designer.cs">
       <DependentUpon>201703200729517_AddUserCreateTime.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703201321060_ChangeActionModel.cs" />
+    <Compile Include="Migrations\201703201321060_ChangeActionModel.Designer.cs">
+      <DependentUpon>201703201321060_ChangeActionModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Action.cs" />
     <Compile Include="Models\DailyReportsContext.cs" />
@@ -79,6 +83,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703200729517_AddUserCreateTime.resx">
       <DependentUpon>201703200729517_AddUserCreateTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703201321060_ChangeActionModel.resx">
+      <DependentUpon>201703201321060_ChangeActionModel.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.config" />
     <EmbeddedResource Include="db.config">

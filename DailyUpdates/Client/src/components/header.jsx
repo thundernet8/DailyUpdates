@@ -1,6 +1,6 @@
 import React, { PropTypes }             from 'react'
 import { Link }                         from 'react-router'
-import { Layout, Menu, Icon }                 from 'antd'
+import { Layout, Menu, Icon, Dropdown } from 'antd'
 import classNames                       from 'classnames'
 import styles                           from '../styles/app.scss'
 
@@ -52,6 +52,14 @@ export default class DUHeader extends React.Component {
             )
         })
 
+        const reportMenus = (
+            <Menu>
+                <Menu.Item key="0"><Link to="/records/new"><Icon type="rocket"/>Add Record</Link></Menu.Item>
+                <Menu.Divider />
+                <Menu.Item key="1"><Link to="/actions/new"><Icon type="solution"/>Add Action</Link></Menu.Item>
+            </Menu>
+        )
+
         return (
             <Header>
                 <div className={classNames('logo', styles.logo)}>
@@ -68,9 +76,11 @@ export default class DUHeader extends React.Component {
                 </Menu>
                 <div className={classNames('profile', styles.profile)}>
                     {this.props.me && this.props.me.IsMember &&
-                    <span className={classNames('createRecord', styles.createRecord)} title="Add Record">
-                        <Link to="/records/new"><Icon type="edit"/></Link>
-                    </span>
+                    <Dropdown overlay={reportMenus} trigger={['click']}>
+                        <span className={classNames('createRecord', styles.createRecord)} title="Add Report">
+                            <a className="ant-dropdown-link" href="javascript:;"><Icon type="edit" /></a>
+                        </span>
+                    </Dropdown>
                     }
                     <span className={classNames('userName', styles.userName)}><Link to="/me/today">{this.props.me ? this.props.me.Name : ''}</Link></span>
                 </div>

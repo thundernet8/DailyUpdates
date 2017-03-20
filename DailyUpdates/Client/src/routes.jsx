@@ -16,6 +16,8 @@ import MyTodayPage from './containers/myToday'
 import EditRecordPage from './containers/editRecord'
 import UsersPage from './containers/users'
 import CreateUserPage from './containers/createUser'
+import CreateActionPage from './containers/createAction'
+import EditActionPage from './containers/editAction'
 
 const validateDateHandler = (nextState, replace, callback) => {
     const dataStr = nextState.params.year + '-' + nextState.params.month + '-' + nextState.params.day
@@ -40,6 +42,8 @@ const routes = (
             <Route path="/tasks/new" component={CreateTaskPage}/>
             <Route path="/records/new" component={CreateRecordPage}/>
             <Route path="/records/edit/:id" component={EditRecordPage}/>
+            <Route path="/actions/new" component={CreateActionPage}/>
+            <Route path="/actions/edit/:id" component={EditActionPage}/>
             <Route path="/users" component={UsersPage}/>
             <Route path="/users/new" component={CreateUserPage}/>
             <Route path="/me/today" component={MyTodayPage}/>

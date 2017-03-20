@@ -6,6 +6,7 @@ import { topTasksReducer, tasksReducer }                  from './tasks'
 import { myRecordsTodayReducer, myRecordReducer }         from './records'
 import { activitiesReducer }                              from './activities'
 import { usersReducer, createdUserReducer }               from './users'
+import { myActionsReducer, myActionReducer, openActionsReducer }              from './actions'
 
 export default combineReducers({
     routing: routerReducer,
@@ -17,5 +18,8 @@ export default combineReducers({
     myRecord: myRecordReducer,
     activities: activitiesReducer,
     users: usersReducer,
-    createdUser: createdUserReducer
+    createdUser: createdUserReducer,
+    myActions: myActionsReducer,
+    myAction: myActionReducer,
+    openActions: openActionsReducer
 })

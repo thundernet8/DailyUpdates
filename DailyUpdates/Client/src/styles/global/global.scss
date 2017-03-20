@@ -163,34 +163,68 @@ p {
     }
 }
 
+.ant-table-wrapper {
+    .ant-table {
+        color: #222;
+    }
+    .ant-table-title {
+        font-size: 24px;
+        text-align: center;
+    }
+    th {
+        font-weight: 600;
+        font-size: 16px;
+        text-align: center;
+    }
+    .ant-table-thead > tr > th {
+        color: #666;
+    }
+    td {
+        white-space: pre-line;
+    }
+    td.centralCol {
+        text-align: center;
+    }
+}
+
 .homeWrap {
+    .ant-calendar-picker {
+        position: absolute;
+        top: 20px;
+        right: 10px;
+        width: 50px;
+        height: 30px;
+        input {
+            display: none;
+        }
+        .ant-calendar-picker-clear {
+            display: none;
+        }
+        .ant-calendar-picker-icon {
+            width: 20px;
+            height: 20px;
+            line-height: 30px;
+            &:after {
+                font-size: 20px;
+                line-height: 30px;
+            }
+            cursor: pointer;
+        }
+    }
     .ant-table-wrapper {
         margin-bottom: 50px;
-        .ant-table {
-            color: #222;
-        }
-        .ant-table-title {
-             font-size: 24px;
-            text-align: center;
-        }
-        th {
-            font-weight: 600;
-            font-size: 16px;
-            text-align: center;
-        }
-        .ant-table-thead > tr > th {
-            color: #666;
-        }
-        td {
-            white-space: pre-line;
-        }
         td.firstCol {
             font-weight: 600;
             font-size: 15px;
             color: #666;
             text-align: center;
         }
-        .centralCol {
+    }
+}
+
+.myTodayWrap {
+    .ant-table-wrapper {
+        th {
             text-align: center;
         }
     }

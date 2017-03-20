@@ -115,7 +115,7 @@ namespace DBModel.Services
         {
             if (date == null)
             {
-                date = DateTime.Now.Date;
+                date = DateTime.UtcNow.Date;
             }
             using (var _dbContext = new DailyReportsContext())
             {
@@ -160,7 +160,7 @@ namespace DBModel.Services
         {
             if (date == null)
             {
-                date = DateTime.Now.Date;
+                date = DateTime.UtcNow.Date;
             }
             using (var _dbContext = new DailyReportsContext())
             {
@@ -172,7 +172,7 @@ namespace DBModel.Services
         {
             if (date == null)
             {
-                date = DateTime.Now.Date;
+                date = DateTime.UtcNow.Date;
             }
             using (var _dbContext = new DailyReportsContext())
             {
@@ -195,14 +195,51 @@ namespace DBModel.Services
                 return _dbContext.Set<Record>().Where(x => x.Uid == _currentUser.Id && x.Id == id).FirstOrDefault();
             }
         }
+
         #endregion
+
+        #region Get Actions
+        public ICollection<Models.Action> GetOpenActions()
+        {
+            using (var _dbContext = new DailyReportsContext())
+            {
+                return _dbContext.Set<Models.Action>().Where(x => x.Status == ActionStatus.Open).OrderBy(x => x.Id).ToList();
+            }
+        }
+
+        public ICollection<Models.Action> GetMyActions()
+        {
+            using (var _dbContext = new DailyReportsContext())
+            {
+                return _dbContext.Set<Models.Action>().Where(x => x.Uid == _currentUser.Id).OrderBy(x => x.Id).ToList();
+            }
+        }
+
+        public Models.Action GetMyAction(int id)
+        {
+            using (var _dbContext = new DailyReportsContext())
+            {
+                return _dbContext.Set<Models.Action>().Where(x => x.Uid == _currentUser.Id && x.Id == id).OrderBy(x => x.Id).FirstOrDefault();
+            }
+        }
+
+        public Models.Action GetAction(int id)
+        {
+            using (var _dbContext = new DailyReportsContext())
+            {
+                return _dbContext.Set<Models.Action>().Find(id);
+            }
+        }
+
+        #endregion
+        
 
         #region Activities
         public DayActivities GetDayActivities(DateTime? date = null)
         {
             if (date == null)
             {
-                date = DateTime.Now.Date;
+                date = DateTime.UtcNow.Date;
             }
             else
             {
@@ -237,7 +274,7 @@ namespace DBModel.Services
                     Name = name,
                     DomainName = domainName,
                     Role = UserRole.Owner,
-                    Create = DateTime.Now
+                    Create = DateTime.UtcNow
                 });
 
                 _dbContext.SaveChanges();
@@ -267,7 +304,7 @@ namespace DBModel.Services
                     Name = name,
                     DomainName = domainName,
                     Role = role,
-                    Create = DateTime.Now
+                    Create = DateTime.UtcNow
                 });
 
                 _dbContext.SaveChanges();
@@ -432,7 +469,7 @@ namespace DBModel.Services
 
             using (var _dbContext = new DailyReportsContext())
             {
-                var nowDate = DateTime.Now.Date;
+                var nowDate = DateTime.UtcNow.Date;
                 // relationship validation
                 // http://stackoverflow.com/questions/14601676/the-specified-type-member-date-is-not-supported-in-linq-to-entities-only-init
                 if (_dbContext.Records.Any(x => DbFunctions.TruncateTime(x.Create) == nowDate && x.FieldId == fieldId))
@@ -445,7 +482,7 @@ namespace DBModel.Services
                     Uid = _currentUser.Id,
                     FieldId = fieldId,
                     Destination = destination,
-                    Create = DateTime.Now,
+                    Create = DateTime.UtcNow,
                     Detail = detail
                 });
                 _dbContext.SaveChanges();
@@ -489,7 +526,7 @@ namespace DBModel.Services
             using (var _dbContext = new DailyReportsContext())
             {
                 // relationship validation
-                var nowDate = DateTime.Now.Date;
+                var nowDate = DateTime.UtcNow.Date;
                 if (_dbContext.Records.Any(x => DbFunctions.TruncateTime(x.Create) == nowDate && x.FieldId == fieldId && x.Id != recordId))
                 {
                     throw new ClientException("the specified field has been fill today");
@@ -497,7 +534,7 @@ namespace DBModel.Services
 
                 record = _dbContext.Records.Where(x => x.Id == recordId).FirstOrDefault();
                 record.FieldId = fieldId;
-                record.Update = DateTime.Now;
+                record.Update = DateTime.UtcNow;
                 record.UpdateBy = _currentUser.Id;
                 record.Destination = destination;
                 record.TurnOver = turnover;
@@ -511,6 +548,78 @@ namespace DBModel.Services
                 }
 
                 return record;
+            }
+        }
+        #endregion
+
+        #region Insert/Update Action
+        public Models.Action AddAction(int projectId, string parties, string description, string comment, ActionPriority priority, ActionStatus status = ActionStatus.Open)
+        {
+            RequireMemberAccess();
+            var user = GetUser(_currentUser.Id);
+            if (user == null)
+            {
+                throw new ClientException("the specified user is not a member");
+            }
+            var project = GetProject(projectId);
+            if (project == null)
+            {
+                throw new ClientException("the specified project is not exist");
+            }
+            if (string.IsNullOrWhiteSpace(description))
+            {
+                throw new ClientException("description must not be blank");
+            }
+
+            using (var _dbContext = new DailyReportsContext())
+            {
+                var action = _dbContext.Actions.Add(new Models.Action()
+                {
+                    Uid = _currentUser.Id,
+                    ProjectId = projectId,
+                    Parties = parties,
+                    Description = description,
+                    Create = DateTime.UtcNow,
+                    Comment = comment,
+                    Priority = priority,
+                    Status = status
+                });
+                _dbContext.SaveChanges();
+
+                return action;
+            }
+        }
+
+        public Models.Action UpdateAction(int actionId, string parties, string description, string comment, ActionPriority priority, ActionStatus status = ActionStatus.Open)
+        {
+            RequireMemberAccess();
+            var action = GetAction(actionId);
+            if (action == null)
+            {
+                throw new ClientException("the specified action is not exist");
+            }
+            else if (action.Uid != _currentUser.Id && !_currentUser.IsAdmin)
+            {
+                throw new ClientException("you cannot edit other's action");
+            }
+
+            if (string.IsNullOrWhiteSpace(description))
+            {
+                throw new ClientException("description must not be blank");
+            }
+
+            using (var _dbContext = new DailyReportsContext())
+            {
+                action = _dbContext.Actions.Where(x => x.Id == actionId).FirstOrDefault();
+                action.Parties = parties;
+                action.Description = description;
+                action.Comment = comment;
+                action.Priority = priority;
+                action.Status = status;
+                action.Update = DateTime.UtcNow;
+                _dbContext.SaveChanges();
+
+                return action;
             }
         }
         #endregion

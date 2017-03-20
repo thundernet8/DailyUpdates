@@ -23,21 +23,35 @@ namespace DailyUpdates.Controllers
         }
 
         [Route("me/today")]
-        public JArray GetMyRecordsToday()
+        public HttpResponseMessage GetMyRecordsToday()
         {
-            List<Record> myRecordsToday = _modelsManager.GetMyRecords(null).ToList();
-            return JArray.FromObject(myRecordsToday);
+            try
+            {
+                List<Record> myRecordsToday = _modelsManager.GetMyRecords(null).ToList();
+                return new Response(JArray.FromObject(myRecordsToday));
+            }
+            catch (Exception ex)
+            {
+                return new Response(ex);
+            }
         }
 
         [Route("me/{id:int}")]
-        public JObject GetMyRecord(int id)
+        public HttpResponseMessage GetMyRecord(int id)
         {
-            Record myRecord = _modelsManager.GetMyRecord(id);
-            if (myRecord == null)
+            try
             {
-                return null;
+                Record myRecord = _modelsManager.GetMyRecord(id);
+                if (myRecord == null)
+                {
+                    return null;
+                }
+                return new Response(JObject.FromObject(myRecord));
             }
-            return JObject.FromObject(myRecord);
+            catch (Exception ex)
+            {
+                return new Response(ex);
+            }
         }
 
         [HttpPost]

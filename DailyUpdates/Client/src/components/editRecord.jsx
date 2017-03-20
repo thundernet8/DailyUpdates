@@ -103,19 +103,19 @@ export default class EditRecordPage extends React.Component {
     }
 
     render () {
+        if (!this.state.prepared) {
+            return (
+                <div className={classNames('editRecordWrap loading', styles.editRecordWrap)}>
+                    <Spin className={styles.pageSpin}/>
+                </div>
+            )
+        }
+
         if (!this.props.me || !this.props.me.IsMember) {
             return (
                 <div className={classNames('editRecordWrap err', styles.editRecordWrap)}>
                     <h2 className={classNames('pageTitle', styles.pageTitle)}>Edit Record</h2>
                     <h3 className={styles.pageSubTitle}><Icon type="frown-o" />Only Member Can Update A Record.</h3>
-                </div>
-            )
-        }
-
-        if (!this.state.prepared) {
-            return (
-                <div className={classNames('editRecordWrap loading', styles.editRecordWrap)}>
-                    <Spin className={styles.pageSpin}/>
                 </div>
             )
         }

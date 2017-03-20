@@ -2,7 +2,7 @@ import React, { PropTypes }                         from 'react'
 import { Link }                                     from 'react-router'
 import classNames                                   from 'classnames'
 import styles                                       from '../styles/app.scss'
-import { Spin, Card, Col, Row, Icon, Collapse, Button }               from 'antd'
+import { Spin, Card, Col, Row, Icon, Collapse, Button, Table }               from 'antd'
 
 const Panel = Collapse.Panel
 
@@ -43,9 +43,93 @@ export default class MyTodayPage extends React.Component {
             return record
         })
 
+        const actionColumns = [
+            {
+                title: 'ID',
+                dataIndex: 'id',
+                key: 'id',
+                width: 60,
+                className: 'centralCol'
+            },
+            {
+                title: 'Description',
+                dataIndex: 'description',
+                key: 'description'
+            },
+            {
+                title: 'Parties',
+                dataIndex: 'parties',
+                key: 'parties',
+                className: 'centralCol'
+            },
+            {
+                title: 'Priority',
+                dataIndex: 'priority',
+                key: 'priority',
+                width: 80,
+                className: 'centralCol'
+            },
+            {
+                title: 'Status',
+                dataIndex: 'status',
+                key: 'status',
+                width: 80,
+                className: 'centralCol'
+            },
+            {
+                title: 'Create Time',
+                dataIndex: 'create',
+                key: 'create',
+                width: 150,
+                className: 'centralCol'
+            },
+            {
+                title: 'Update Time',
+                dataIndex: 'update',
+                key: 'update',
+                className: 'centralCol'
+            },
+            {
+                title: 'Comment',
+                dataIndex: 'comment',
+                key: 'comment'
+            },
+            {
+                title: '',
+                dataIndex: 'edit',
+                key: 'edit',
+                width: 75,
+                className: 'centralCol'
+            }
+        ]
+
+        const actionsData = this.props.myActions.filter(action => action.Status === 0).map((action) => {
+            return {
+                key: action.Id.toString(),
+                id: action.Id,
+                description: action.Description,
+                parties: action.Parties,
+                priority: action.PriorityStr,
+                status: action.StatusStr,
+                create: (new Date(action.Create)).toLocaleString(),
+                update: action.Update ? (new Date(action.Update)).toLocaleString() : 'N/A',
+                comment: action.Comment,
+                edit: <Link to={`/actions/edit/${action.Id}`}><Icon type="edit"/>Edit</Link>
+            }
+        })
+
+        const actionsTable = (
+            <Table
+                columns={actionColumns}
+                dataSource={actionsData}
+                bordered
+            />
+        )
+
         return (
             <div className={classNames('myTodayWrap', styles.myTodayWrap)}>
                 <h2 className={classNames('pageTitle', styles.pageTitle)}>My Today</h2>
+                <h3 className={styles.fieldTitle}>Records</h3>
                 {records.length > 0 &&
                 <Collapse defaultActiveKey={[records[0].Id.toString()]} accordion>
                     {records.map((record) => {
@@ -69,6 +153,8 @@ export default class MyTodayPage extends React.Component {
                     })}
                 </Collapse>
                 }
+                <h3 className={styles.fieldTitle}>Actions</h3>
+                {actionsTable}
             </div>
         )
     }
