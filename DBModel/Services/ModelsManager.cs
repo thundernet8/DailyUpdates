@@ -9,15 +9,16 @@ using DBModel.DataContract;
 
 namespace DBModel.Services
 {
-    public class ModelsManager
+    public class ModelsManager : IModelsManager
     {
         private User _currentUser = null;
 
-        public ModelsManager(string domainName)
+        public ModelsManager(DomainName domainName)
         {
             using (var _dbContext = new DailyReportsContext())
             {
-                var existUser = _dbContext.Users.Where(x => x.DomainName == domainName).FirstOrDefault();
+                var fullName = domainName.GetFullName();
+                var existUser = _dbContext.Users.Where(x => x.DomainName == fullName).FirstOrDefault();
                 if (existUser != null)
                 {
                     _currentUser = existUser;
@@ -26,8 +27,8 @@ namespace DBModel.Services
                 {
                     _currentUser = new User()
                     {
-                        Name = domainName.Split('\\')[1],
-                        DomainName = domainName,
+                        Name = domainName.GetName(),
+                        DomainName = domainName.GetFullName(),
                         Role = UserRole.Guest,
                         Id = 0
                     };

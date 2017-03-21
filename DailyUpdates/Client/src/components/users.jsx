@@ -81,7 +81,7 @@ export default class UsersPage extends React.Component {
             </Link>
             </div>) : null
         const content = this.props.me && this.props.me.IsOwner
-        ? usersTable : <h3 classNames={styles.pageSubTitle}>You have no permission to view users</h3>
+        ? usersTable : <h3 className={styles.pageSubTitle}>You have no permission to view users</h3>
         return (
             <div className={classNames('usersWrap', styles.usersWrap)}>
                 <h2 className={classNames('pageTitle', styles.pageTitle)}>Member Users</h2>

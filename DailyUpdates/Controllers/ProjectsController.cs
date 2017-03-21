@@ -17,36 +17,21 @@ namespace DailyUpdates.Controllers
     [RoutePrefix("api/v1/projects")]
     public class ProjectsController : ApiController
     {
-        private ModelsManager _modelsManager = null;
+        private IModelsManager _modelsManager;
 
-        public ProjectsController()
+        public ProjectsController(IModelsManager modelsManager)
         {
-            _modelsManager = new ModelsManager(RequestContext.Principal.Identity.Name);
+            _modelsManager = modelsManager;
         }
 
         [Route("")]
-        public JArray GetAllProjects()
+        public HttpResponseMessage GetAllProjects()
         {
-            List<Project> projects = _modelsManager.GetProjects().ToList();
-            return JArray.FromObject(projects);
-        }
-
-        // GET: api/Projects/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        [HttpPost]
-        [Route("")]
-        [ResponseType(typeof(JObject))]
-        public HttpResponseMessage CreateProject(HttpRequestMessage request, [FromBody]Project project)
-        {
+            
             try
             {
-                Project newProject = _modelsManager.AddProject(project.Name, project.Description);
-                // return JObject.FromObject(newProject);
-                return request.CreateResponse(HttpStatusCode.OK, JObject.FromObject(newProject));
+                List<Project> projects = _modelsManager.GetProjects().ToList();
+                return new Response(JArray.FromObject(projects));
             }
             catch (Exception ex)
             {
@@ -54,15 +39,20 @@ namespace DailyUpdates.Controllers
             }
         }
 
-        // PUT: api/Projects/5
-        public void Put(int id, [FromBody]string value)
+        [HttpPost]
+        [Route("")]
+        [ResponseType(typeof(JObject))]
+        public HttpResponseMessage CreateProject([FromBody]Project project)
         {
-            
-        }
-
-        // DELETE: api/Projects/5
-        public void Delete(int id)
-        {
+            try
+            {
+                Project newProject = _modelsManager.AddProject(project.Name, project.Description);
+                return new Response(JObject.FromObject(newProject));
+            }
+            catch (Exception ex)
+            {
+                return new Response(ex);
+            }
         }
     }
 }

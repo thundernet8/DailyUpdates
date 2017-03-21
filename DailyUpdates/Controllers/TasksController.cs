@@ -15,25 +15,39 @@ namespace DailyUpdates.Controllers
     [RoutePrefix("api/v1/tasks")]
     public class TasksController : ApiController
     {
-        private ModelsManager _modelsManager = null;
+        private IModelsManager _modelsManager;
 
-        public TasksController()
+        public TasksController(IModelsManager modelsManager)
         {
-            _modelsManager = new ModelsManager(RequestContext.Principal.Identity.Name);
+            _modelsManager = modelsManager;
         }
 
         [Route("top")]
-        public JArray GetTopTasks()
+        public HttpResponseMessage GetTopTasks()
         {
-            List<TopField> topTasks = _modelsManager.GetTopFields(null).ToList();
-            return JArray.FromObject(topTasks);
+            try
+            {
+                List<TopField> topTasks = _modelsManager.GetTopFields(null).ToList();
+                return new Response(JArray.FromObject(topTasks));
+            }
+            catch (Exception ex)
+            {
+                return new Response(ex);
+            }
         }
 
         [Route("")]
-        public JArray GetTasks()
+        public HttpResponseMessage GetTasks()
         {
-            List<Field> tasks = _modelsManager.GetFields(null).ToList();
-            return JArray.FromObject(tasks);
+            try
+            {
+                List<Field> tasks = _modelsManager.GetFields(null).ToList();
+                return new Response(JArray.FromObject(tasks));
+            }
+            catch (Exception ex)
+            {
+                return new Response(ex);
+            }
         }
 
         [HttpPost]

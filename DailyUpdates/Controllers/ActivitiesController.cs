@@ -15,11 +15,11 @@ namespace DailyUpdates.Controllers
     [RoutePrefix("api/v1/activities")]
     public class ActivitiesController : ApiController
     {
-        private ModelsManager _modelsManager = null;
+        private IModelsManager _modelsManager;
 
-        public ActivitiesController()
+        public ActivitiesController(IModelsManager modelsManager)
         {
-            _modelsManager = new ModelsManager(RequestContext.Principal.Identity.Name);
+            _modelsManager = modelsManager;
         }
 
         [Route("today")]

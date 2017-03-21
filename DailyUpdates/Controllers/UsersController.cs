@@ -12,11 +12,11 @@ namespace DailyUpdates.Controllers
     [RoutePrefix("api/v1/users")]
     public class UsersController : ApiController
     {
-        private ModelsManager _modelsManager = null;
+        private IModelsManager _modelsManager;
 
-        public UsersController()
+        public UsersController(IModelsManager modelsManager)
         {
-            _modelsManager = new ModelsManager(RequestContext.Principal.Identity.Name /* HttpContext.Current.User.Identity.Name */);
+            _modelsManager = modelsManager;
         }
 
         [HttpGet]

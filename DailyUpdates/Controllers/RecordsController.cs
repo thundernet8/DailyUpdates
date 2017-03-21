@@ -15,11 +15,11 @@ namespace DailyUpdates.Controllers
     [RoutePrefix("api/v1/records")]
     public class RecordsController : ApiController
     {
-        private ModelsManager _modelsManager = null;
+        private IModelsManager _modelsManager;
 
-        public RecordsController()
+        public RecordsController(IModelsManager modelsManager)
         {
-            _modelsManager = new ModelsManager(RequestContext.Principal.Identity.Name);
+            _modelsManager = modelsManager;
         }
 
         [Route("me/today")]
