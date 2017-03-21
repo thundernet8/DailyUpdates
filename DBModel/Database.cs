@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using System.Configuration;
 
 namespace DBModel
 {
@@ -16,12 +17,15 @@ namespace DBModel
             get
             {
 
-                var sqlBuilder = new SqlConnectionStringBuilder();
-                sqlBuilder.DataSource = Utils.GetSetting("ServerName");
-                sqlBuilder.InitialCatalog = Utils.GetSetting("DBName");
-                sqlBuilder.IntegratedSecurity = true;
+                //var sqlBuilder = new SqlConnectionStringBuilder();
+                //sqlBuilder.DataSource = Utils.GetSetting("ServerName");
+                //sqlBuilder.InitialCatalog = Utils.GetSetting("DBName");
+                //sqlBuilder.IntegratedSecurity = true;
 
-                return new SqlConnection(sqlBuilder.ToString());
+                // return new SqlConnection(sqlBuilder.ToString());
+
+                var connectionStr = ConfigurationManager.ConnectionStrings["DailyUpdatesDBConnectionString"].ConnectionString;
+                return new SqlConnection(connectionStr);
             }
         }
     }

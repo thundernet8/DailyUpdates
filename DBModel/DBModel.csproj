@@ -40,6 +40,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -87,7 +88,9 @@
     <EmbeddedResource Include="Migrations\201703201321060_ChangeActionModel.resx">
       <DependentUpon>201703201321060_ChangeActionModel.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <EmbeddedResource Include="db.config">
       <SubType>Designer</SubType>
     </EmbeddedResource>

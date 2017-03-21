@@ -25,27 +25,32 @@ export default class UsersPage extends React.Component {
                 title: 'ID',
                 dataIndex: 'id',
                 key: 'id',
-                width: 100
+                width: 100,
+                className: 'centralCol'
             },
             {
                 title: 'Name',
                 dataIndex: 'name',
-                key: 'name'
+                key: 'name',
+                className: 'centralCol'
             },
             {
                 title: 'DomainName',
                 dataIndex: 'domainName',
-                key: 'domainName'
+                key: 'domainName',
+                className: 'centralCol'
             },
             {
                 title: 'CreateTime',
                 dataIndex: 'create',
-                key: 'create'
+                key: 'create',
+                className: 'centralCol'
             },
             {
                 title: 'Role',
                 dataIndex: 'role',
-                key: 'role'
+                key: 'role',
+                className: 'centralCol'
             }
         ]
 
@@ -75,11 +80,13 @@ export default class UsersPage extends React.Component {
                 <Button type="default" icon="plus">Add User</Button>
             </Link>
             </div>) : null
+        const content = this.props.me && this.props.me.IsOwner
+        ? usersTable : <h3 classNames={styles.pageSubTitle}>You have no permission to view users</h3>
         return (
             <div className={classNames('usersWrap', styles.usersWrap)}>
                 <h2 className={classNames('pageTitle', styles.pageTitle)}>Member Users</h2>
                 {addBtn}
-                {usersTable}
+                {content}
             </div>
         )
     }

@@ -155,6 +155,7 @@ export default class CreateActionPage extends React.Component {
                         {...formItemLayout}
                     >
                         <Switch checked={true} />
+                        <span style={{marginLeft: 10}}>Open for New</span>
                     </FormItem>
                     <FormItem
                         label="Parties"

@@ -182,15 +182,21 @@ p {
     td {
         white-space: pre-line;
     }
-    td.centralCol {
-        text-align: center;
+    .centralCol {
+        text-align: center !important;
     }
 }
 
 .homeWrap {
+    .homeUtils {
+        position: absolute;
+        width: 225px;
+        top: 30px;
+        right: 0;
+    }
     .ant-calendar-picker {
         position: absolute;
-        top: 20px;
+        top: -12px;
         right: 10px;
         width: 50px;
         height: 30px;

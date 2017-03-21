@@ -123,6 +123,7 @@ export default class MyTodayPage extends React.Component {
                 columns={actionColumns}
                 dataSource={actionsData}
                 bordered
+                pagination={{pageSize: 20}}
             />
         )
 

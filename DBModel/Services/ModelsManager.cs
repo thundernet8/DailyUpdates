@@ -251,7 +251,8 @@ namespace DBModel.Services
                 TopFields = GetTopFields(date),
                 Records = GetRecords(date),
                 Users = GetUsers(),
-                Projects = GetProjects()
+                Projects = GetProjects(),
+                OpenActions = GetOpenActions()
             };
 
             return dayActivities;

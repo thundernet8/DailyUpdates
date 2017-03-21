@@ -54,9 +54,9 @@ export default class DUHeader extends React.Component {
 
         const reportMenus = (
             <Menu>
-                <Menu.Item key="0"><Link to="/records/new"><Icon type="rocket"/>Add Record</Link></Menu.Item>
+                <Menu.Item key="0"><Link to="/records/new"><Icon type="rocket" style={{marginRight: 5}}/>Add Record</Link></Menu.Item>
                 <Menu.Divider />
-                <Menu.Item key="1"><Link to="/actions/new"><Icon type="solution"/>Add Action</Link></Menu.Item>
+                <Menu.Item key="1"><Link to="/actions/new"><Icon type="solution" style={{marginRight: 5}}/>Add Action</Link></Menu.Item>
             </Menu>
         )
 

@@ -20,5 +20,7 @@ namespace DBModel.DataContract
         public ICollection<User> Users { get; set; }
 
         public ICollection<Project> Projects { get; set; }
+
+        public ICollection<Models.Action> OpenActions { get; set; }
     }
 }

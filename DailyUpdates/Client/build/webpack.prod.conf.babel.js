@@ -20,7 +20,7 @@ let appProdConfig = {
   },
 
   output: {
-    filename: '[name].[chunkhash:8].js',
+    filename: '[name].js',
     chunkFilename: '[id].js',
     path: path.resolve(__dirname, '../dist'),
     publicPath: './Client/dist/'
