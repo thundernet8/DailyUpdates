@@ -1,7 +1,7 @@
 using System.Web.Http;
 using System.Web.Mvc;
 
-namespace DailyUpdates.Areas.HelpPage
+namespace Aspen.DailyUpdates.Web.Application.Areas.HelpPage
 {
     public class HelpPageAreaRegistration : AreaRegistration
     {

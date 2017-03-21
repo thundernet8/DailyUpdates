@@ -11,10 +11,10 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
-using DailyUpdates.Areas.HelpPage.ModelDescriptions;
-using DailyUpdates.Areas.HelpPage.Models;
+using Aspen.DailyUpdates.Web.Application.Areas.HelpPage.ModelDescriptions;
+using Aspen.DailyUpdates.Web.Application.Areas.HelpPage.Models;
 
-namespace DailyUpdates.Areas.HelpPage
+namespace Aspen.DailyUpdates.Web.Application.Areas.HelpPage
 {
     public static class HelpPageConfigurationExtensions
     {

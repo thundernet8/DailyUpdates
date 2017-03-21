@@ -1,4 +1,4 @@
-namespace DailyUpdates.Areas.HelpPage
+namespace Aspen.DailyUpdates.Web.Application.Areas.HelpPage
 {
     /// <summary>
     /// Indicates whether the sample is used for request or response

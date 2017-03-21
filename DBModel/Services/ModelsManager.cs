@@ -4,10 +4,10 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DBModel.Models;
-using DBModel.DataContract;
+using Aspen.DailyUpdates.DBModel.Models;
+using Aspen.DailyUpdates.DBModel.DataContract;
 
-namespace DBModel.Services
+namespace Aspen.DailyUpdates.DBModel.Services
 {
     public class ModelsManager : IModelsManager
     {

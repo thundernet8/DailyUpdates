@@ -1,11 +1,11 @@
-﻿using DBModel.Models;
+﻿using Aspen.DailyUpdates.DBModel.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBModel.DataContract
+namespace Aspen.DailyUpdates.DBModel.DataContract
 {
     public class DayActivities
     {

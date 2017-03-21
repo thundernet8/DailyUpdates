@@ -1,12 +1,12 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Web.Http;
 using System.Web;
-using DBModel.Services;
+using Aspen.DailyUpdates.DBModel.Services;
 using System.Net.Http;
 using System;
-using DBModel.Models;
+using Aspen.DailyUpdates.DBModel.Models;
 
-namespace DailyUpdates.Controllers
+namespace Aspen.DailyUpdates.Web.Application.Controllers
 {
     [Authorize]
     [RoutePrefix("api/v1/users")]
@@ -16,7 +16,7 @@ namespace DailyUpdates.Controllers
 
         public UsersController(IModelsManager modelsManager)
         {
-            _modelsManager = modelsManager;
+            _modelsManager = modelsManager; // new ModelsManager(new DomainName(RequestContext.Principal.Identity.Name));
         }
 
         [HttpGet]

@@ -5,9 +5,9 @@ using System.Reflection;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
 using System.Xml.XPath;
-using DailyUpdates.Areas.HelpPage.ModelDescriptions;
+using Aspen.DailyUpdates.Web.Application.Areas.HelpPage.ModelDescriptions;
 
-namespace DailyUpdates.Areas.HelpPage
+namespace Aspen.DailyUpdates.Web.Application.Areas.HelpPage
 {
     /// <summary>
     /// A custom <see cref="IDocumentationProvider"/> that reads the API documentation from an XML documentation file.

@@ -6,9 +6,8 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using DailyUpdates.Unity;
 
-namespace DailyUpdates
+namespace Aspen.DailyUpdates.Web.Application
 {
     public class WebApiApplication : System.Web.HttpApplication
     {
@@ -19,8 +18,6 @@ namespace DailyUpdates
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            WebApiDependencyResolver.Register(GlobalConfiguration.Configuration);
         }
     }
 }

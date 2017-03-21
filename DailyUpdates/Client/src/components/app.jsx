@@ -25,7 +25,7 @@ export default class App extends React.Component {
                     </Breadcrumb> */}
                     <div style={{ background: '#fff', padding: 24, minHeight: 400 }}>{this.props.children}</div>
                 </Content>
-                <Footer style={{ textAlign: 'center' }}>Scheduling Daily © 2017 AspenTech</Footer>
+                <Footer style={{ textAlign: 'center' }}>{`Scheduling Daily © 2017-${(new Date()).getFullYear()} AspenTech`}</Footer>
             </div>
         )
     }

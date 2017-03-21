@@ -1,6 +1,4 @@
-﻿using DailyUpdates.Controllers;
-using DBModel.Services;
-using Microsoft.Practices.Unity;
+﻿using Microsoft.Practices.Unity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,23 +6,57 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.Dependencies;
 
-namespace DailyUpdates.Unity
+namespace Aspen.DailyUpdates.Web.Application.Unity
 {
-    public class WebApiDependencyResolver : IDependencyResolver
+    /// <summary>
+    /// An implementation of the <see cref="IDependencyResolver"/> interface that wraps a Unity container.
+    /// </summary>
+    public sealed class WebApiDependencyResolver : System.Web.Http.Dependencies.IDependencyResolver
     {
-        protected IUnityContainer container;
+        private SharedDependencyScope sharedScope;
 
-        public WebApiDependencyResolver(IUnityContainer container)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WebApiDependencyResolver"/> class for a container.
+        /// </summary>
+        /// <param name="container">The <see cref="IUnityContainer"/> to wrap with the <see cref="IDependencyResolver"/>
+        /// interface implementation.</param>
+        public WebApiDependencyResolver()
         {
-            if (container == null)
-            {
-                throw new ArgumentNullException("container");
-            }
-            this.container = container;
+            this.sharedScope = new SharedDependencyScope(this);
         }
 
+        /// <summary>
+        /// Reuses the same scope to resolve all the instances.
+        /// </summary>
+        /// <returns>The shared dependency scope.</returns>
+        public IDependencyScope BeginScope()
+        {
+            return this.sharedScope;
+        }
+
+        /// <summary>
+        /// Disposes the wrapped <see cref="IUnityContainer"/>.
+        /// </summary>
+        public void Dispose()
+        {
+            this.sharedScope.Dispose();
+        }
+
+        /// <summary>
+        /// Resolves an instance of the default requested type from the container.
+        /// </summary>
+        /// <param name="serviceType">The <see cref="Type"/> of the object to get from the container.</param>
+        /// <returns>The requested object.</returns>
         public object GetService(Type serviceType)
         {
+            var container = UnityContainerProvider.Current;
+            if (container == null)
+                return null;
+
+            // Do not try to create interfaces or abstract types that are not registered
+            if ((serviceType.IsAbstract || serviceType.IsInterface) && !container.IsRegistered(serviceType))
+                return null;
+
             try
             {
                 return container.Resolve(serviceType);
@@ -35,47 +67,47 @@ namespace DailyUpdates.Unity
             }
         }
 
+
+        /// <summary>
+        /// Resolves multiply registered services.
+        /// </summary>
+        /// <param name="serviceType">The type of the requested services.</param>
+        /// <returns>The requested services.</returns>
         public IEnumerable<object> GetServices(Type serviceType)
         {
             try
             {
-                return container.ResolveAll(serviceType);
+                return UnityContainerProvider.Current.ResolveAll(serviceType);
             }
             catch (ResolutionFailedException)
             {
-                return new List<object>();
+                return null;
             }
         }
 
-        public IDependencyScope BeginScope()
+        private sealed class SharedDependencyScope : System.Web.Http.Dependencies.IDependencyScope
         {
-            var child = container.CreateChildContainer();
-            return new WebApiDependencyResolver(child);
-        }
+            WebApiDependencyResolver _parent;
 
-        public void Dispose()
-        {
-            container.Dispose();
-        }
+            public SharedDependencyScope(WebApiDependencyResolver parent)
+            {
+                _parent = parent;
+            }
 
-        public static void Register(HttpConfiguration config)
-        {
-            //// create container for modelsManger dependency injection
-            //var container = new UnityContainer();
-            //container.RegisterType<IModelsManager, ModelsManager>("DomainName", new HierarchicalLifetimeManager(), new InjectionConstructor(HttpContext.Current.User.Identity.Name));
-            //config.DependencyResolver = new WebApiDependencyResolver(container);
+            public object GetService(Type serviceType)
+            {
+                return _parent.GetService(serviceType);
+            }
 
-            // Create a new Unity dependency injection container
-            var unity = new UnityContainer();
+            public IEnumerable<object> GetServices(Type serviceType)
+            {
+                return _parent.GetServices(serviceType);
+            }
 
-            // Register the Controllers that should be injectable
-            unity.RegisterType<IModelsManager, ModelsManager>(new HierarchicalLifetimeManager());
-
-            // Register instances to be used when resolving constructor parameter dependencies
-            unity.RegisterInstance(new DomainName());
-
-            // Finally, override the default dependency resolver with Unity
-            GlobalConfiguration.Configuration.DependencyResolver = new WebApiDependencyResolver(unity);
+            public void Dispose()
+            {
+                // NO-OP, as the container is shared.
+            }
         }
     }
 }

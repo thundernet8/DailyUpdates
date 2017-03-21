@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Aspen.DailyUpdates.Web.Application.Unity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 
-namespace DailyUpdates
+namespace Aspen.DailyUpdates.Web.Application
 {
     public static class WebApiConfig
     {

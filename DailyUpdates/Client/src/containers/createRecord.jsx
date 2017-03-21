@@ -6,7 +6,8 @@ import Actions                      from '../actions'
 const mapStateToProps = (state) => {
   return {
       me: state.me,
-      tasks: state.tasks
+      tasks: state.topTasks,
+      projects: state.projects
   }
 }
 
@@ -15,8 +16,10 @@ const mapDispatchToProps = (dispatch) => {
       onCreateRecord: (data) => {
           return dispatch(Actions.createRecord(data))
       },
-      onGetTasks: () => {
-          return dispatch(Actions.getTasks())
+      onPrepareData: () => {
+          return Promise.all(
+              [dispatch(Actions.getAllProjects()), dispatch(Actions.getTopTasks())]
+          )
       }
   }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBModel.Services
+namespace Aspen.DailyUpdates.DBModel.Services
 {
     public class ClientException : Exception
     {

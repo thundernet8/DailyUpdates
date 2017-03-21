@@ -80,7 +80,7 @@ export default class UsersPage extends React.Component {
                 <Button type="default" icon="plus">Add User</Button>
             </Link>
             </div>) : null
-        const content = this.props.me && this.props.me.IsOwner
+        const content = this.props.me && this.props.me.IsMember
         ? usersTable : <h3 className={styles.pageSubTitle}>You have no permission to view users</h3>
         return (
             <div className={classNames('usersWrap', styles.usersWrap)}>

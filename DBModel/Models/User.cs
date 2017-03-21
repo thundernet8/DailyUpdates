@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBModel.Models
+namespace Aspen.DailyUpdates.DBModel.Models
 {
     [Table("Users", Schema = "dbo")]
     public class User

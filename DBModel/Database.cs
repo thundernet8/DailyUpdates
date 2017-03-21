@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Configuration;
 
-namespace DBModel
+namespace Aspen.DailyUpdates.DBModel
 {
     public class Database
     {

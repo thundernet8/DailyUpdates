@@ -5,9 +5,9 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DBModel;
+using Aspen.DailyUpdates.DBModel;
 
-namespace DBModel.Models
+namespace Aspen.DailyUpdates.DBModel.Models
 {
     public class DailyReportsContext : DbContext
     {

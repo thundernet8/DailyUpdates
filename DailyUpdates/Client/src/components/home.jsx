@@ -291,7 +291,7 @@ export default class HomePage extends React.Component {
             const columns = this.getTableColumns(items)
             const data = this.getTableData(items)
             const title = () => project.Name
-            const pagination = this.state.type === 1 ? false : {pageSize: 20}
+            const pagination = this.state.type === 1 ? {pageSize: 10} : {pageSize: 20} // this.state.type === 1 ? false : {pageSize: 20}
 
             return (
                 <Table

@@ -1,10 +1,10 @@
 using System;
 using System.Web.Http;
 using System.Web.Mvc;
-using DailyUpdates.Areas.HelpPage.ModelDescriptions;
-using DailyUpdates.Areas.HelpPage.Models;
+using Aspen.DailyUpdates.Web.Application.Areas.HelpPage.ModelDescriptions;
+using Aspen.DailyUpdates.Web.Application.Areas.HelpPage.Models;
 
-namespace DailyUpdates.Areas.HelpPage.Controllers
+namespace Aspen.DailyUpdates.Web.Application.Areas.HelpPage.Controllers
 {
     /// <summary>
     /// The controller that will handle requests for the help page.

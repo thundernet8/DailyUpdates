@@ -1,12 +1,12 @@
-﻿using DBModel.DataContract;
-using DBModel.Models;
+﻿using Aspen.DailyUpdates.DBModel.DataContract;
+using Aspen.DailyUpdates.DBModel.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBModel.Services
+namespace Aspen.DailyUpdates.DBModel.Services
 {
     public interface IModelsManager
     {

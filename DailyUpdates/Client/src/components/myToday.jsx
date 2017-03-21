@@ -114,7 +114,7 @@ export default class MyTodayPage extends React.Component {
                 create: (new Date(action.Create)).toLocaleString(),
                 update: action.Update ? (new Date(action.Update)).toLocaleString() : 'N/A',
                 comment: action.Comment,
-                edit: <Link to={`/actions/edit/${action.Id}`}><Icon type="edit"/>Edit</Link>
+                edit: <Link to={`/actions/edit/${action.Id}`}><Icon type="edit" style={{marginRight: 5}}/>Edit</Link>
             }
         })
 

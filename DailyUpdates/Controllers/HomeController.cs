@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace DailyUpdates.Controllers
+namespace Aspen.DailyUpdates.Web.Application.Controllers
 {
     public class HomeController : Controller
     {

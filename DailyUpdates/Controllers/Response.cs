@@ -6,9 +6,9 @@ using System.Net;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Formatting;
-using DBModel.Services;
+using Aspen.DailyUpdates.DBModel.Services;
 
-namespace DailyUpdates.Controllers
+namespace Aspen.DailyUpdates.Web.Application.Controllers
 {
     public class Response : HttpResponseMessage
     {

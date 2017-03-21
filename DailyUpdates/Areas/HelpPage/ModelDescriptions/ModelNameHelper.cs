@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
-namespace DailyUpdates.Areas.HelpPage.ModelDescriptions
+namespace Aspen.DailyUpdates.Web.Application.Areas.HelpPage.ModelDescriptions
 {
     internal static class ModelNameHelper
     {

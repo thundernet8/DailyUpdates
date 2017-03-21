@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{686DD3F9-1C78-4790-8BF7-D217FF0E6553}</ProjectGuid>
+    <ProjectGuid>{9367D592-77BF-4055-B29C-0E90C7F3B6E1}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ConsoleTest</RootNamespace>
-    <AssemblyName>ConsoleTest</AssemblyName>
+    <RootNamespace>Install</RootNamespace>
+    <AssemblyName>Install</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -60,9 +60,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DBModel\DBModel.csproj">
-      <Project>{00d07541-63e5-4ffb-a830-e746b5478c53}</Project>
-      <Name>DBModel</Name>
+    <ProjectReference Include="..\DBModel\Aspen.DailyUpdates.DBModel.csproj">
+      <Project>{00D07541-63E5-4FFB-A830-E746B5478C53}</Project>
+      <Name>Aspen.DailyUpdates.DBModel</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

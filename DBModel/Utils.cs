@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace DBModel
+namespace Aspen.DailyUpdates.DBModel
 {
     public static class Utils
     {

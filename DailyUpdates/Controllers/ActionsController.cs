@@ -1,5 +1,5 @@
-﻿using DBModel.Models;
-using DBModel.Services;
+﻿using Aspen.DailyUpdates.DBModel.Models;
+using Aspen.DailyUpdates.DBModel.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 
-namespace DailyUpdates.Controllers
+namespace Aspen.DailyUpdates.Web.Application.Controllers
 {
     [Authorize]
     [RoutePrefix("api/v1/actions")]

@@ -24,7 +24,7 @@ export default class DUHeader extends React.Component {
     ]
 
     componentWillReceiveProps (nextProps) {
-        if (nextProps.me && nextProps.me.IsAdmin) {
+        if (nextProps.me && nextProps.me.IsMember) {
             this.navs[4] = {to: '/users', title: 'Users'}
         }
         if (nextProps.pathName) {

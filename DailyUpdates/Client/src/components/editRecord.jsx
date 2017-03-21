@@ -18,8 +18,9 @@ export default class EditRecordPage extends React.Component {
         destination: '',
         detail: '',
         submitting: false,
-        subTasks: null,
-        fieldId: 0,
+        projectId: 0,
+        topFieldId: 0,
+        subFieldId: 0,
         turnover: false,
         prepared: false
     }
@@ -36,14 +37,37 @@ export default class EditRecordPage extends React.Component {
         })
     }
 
-    selectTask = (value) => {
-        const fieldId = parseInt(value)
-        const task = this.state.subTasks.filter(task => task.Id === fieldId)[0]
+    selectProject = (value) => {
         this.setState({
-            fieldId: fieldId,
-            destination: task.Destination,
-            turnover: task.TurnOver !== null
+            projectId: parseInt(value),
+            topFieldId: 0,
+            subFieldId: 0
         })
+    }
+
+    selectTopTask = (value) => {
+        this.setState({
+            topFieldId: parseInt(value)
+        })
+    }
+
+    selectSubTask = (value) => {
+        const subFieldId = parseInt(value)
+        const subFields = this.getSpecifiedSubFields(this.state.topFieldId)
+        if (subFields.length > 0) {
+            const subField = subFields.filter(item => item.Id === subFieldId)[0]
+            this.setState({
+                subFieldId: subFieldId,
+                destination: subField.Destination,
+                turnover: subField.TurnOver !== null
+            })
+        } else {
+            this.setState({
+                subFieldId: subFieldId,
+                destination: '',
+                turnover: false
+            })
+        }
     }
 
     onTurnoverChange = (checked) => {
@@ -52,12 +76,35 @@ export default class EditRecordPage extends React.Component {
         })
     }
 
+    getSpecifiedTopFields = () => {
+        return this.props.tasks.filter(task => task.ProjectId === this.state.projectId && task.Parent === 0)
+    }
+
+    getSpecifiedSubFields = (topFieldId) => {
+        return this.props.tasks.filter(task => task.Parent === topFieldId)
+    }
+
+    fillTableByCurrentRecord = (record, tasks, projects) => {
+        const subField = tasks.filter(item => item.Id === record.FieldId)[0]
+        const topField = tasks.filter(item => item.Id === subField.Parent)[0]
+        const project = projects.filter(item => item.Id === topField.ProjectId)[0]
+        this.setState({
+            prepared: true,
+            turnover: subField.TurnOver,
+            projectId: project.Id,
+            topFieldId: topField.Id,
+            subFieldId: subField.Id,
+            destination: record.Destination,
+            detail: record.Detail
+        })
+    }
+
     updateRecord = () => {
         this.setState({
             submitting: true
         })
         this.props.onUpdateRecord(this.props.params.id, {
-            FieldId: this.state.fieldId,
+            FieldId: this.state.subFieldId,
             Destination: this.state.destination,
             Detail: this.state.detail,
             TurnOver: this.state.turnover
@@ -79,27 +126,8 @@ export default class EditRecordPage extends React.Component {
     componentWillMount () {
         this.props.onPrepareData(parseInt(this.props.params.id))
         .then((ret) => {
-            this.setState({
-                prepared: true,
-                turnover: ret[1].filter(task => task.Id === ret[0].FieldId)[0].TurnOver
-            })
+            this.fillTableByCurrentRecord(ret[0], ret[1], ret[2])
         })
-    }
-
-    componentWillReceiveProps (nextProps) {
-        if (nextProps.tasks) {
-            const subTasks = nextProps.tasks.filter(task => task.Parent !== 0)
-            this.setState({
-                subTasks: subTasks
-            })
-        }
-        if (nextProps.myRecord) {
-            this.setState({
-                fieldId: nextProps.myRecord.FieldId,
-                destination: nextProps.myRecord.Destination,
-                detail: nextProps.myRecord.Detail
-            })
-        }
     }
 
     render () {
@@ -136,7 +164,15 @@ export default class EditRecordPage extends React.Component {
 
         const btnWrapperCol = { span: 14, offset: 15 }
 
-        const fieldSelection = this.state.subTasks.map((task) => {
+        const projectSelection = this.props.projects.map((project) => {
+            return <Option key={project.Id} value={project.Id.toString()}>{project.Name}</Option>
+        })
+
+        const topFieldSelection = this.getSpecifiedTopFields().map((task) => {
+            return <Option key={task.Id} value={task.Id.toString()}>{task.Name}</Option>
+        })
+
+        const getSubFieldSelection = (topFieldId) => this.getSpecifiedSubFields(topFieldId).map((task) => {
             return (
                 <Option key={task.Id} value={task.Id.toString()}>{task.Name}</Option>
             )
@@ -153,10 +189,17 @@ export default class EditRecordPage extends React.Component {
                         <p>{(new Date(this.props.myRecord.Create)).toLocaleString()}</p>
                     </FormItem>
                     <FormItem
+                        label="Project"
+                        {...formItemLayout}
+                    >
+                        <Select value={this.state.projectId.toString()} style={{ width: 200 }} onChange={this.selectProject}>{projectSelection}</Select>
+                    </FormItem>
+                    <FormItem
                         label="Field"
                         {...formItemLayout}
                     >
-                        <Select defaultValue={this.props.myRecord.FieldId.toString()} value={this.state.fieldId.toString()} style={{ width: 200 }} onChange={this.selectTask}>{fieldSelection}</Select>
+                        <Select value={this.state.topFieldId ? this.state.topFieldId.toString() : 'Please Select Top Field'} style={{ width: 200 }} onChange={this.selectTopTask}>{topFieldSelection}</Select>
+                        <Select value={this.state.subFieldId ? this.state.subFieldId.toString() : 'Please Select Sub Field'} style={{ width: 200, marginLeft: 10 }} onChange={this.selectSubTask}>{getSubFieldSelection(this.state.topFieldId)}</Select>
                     </FormItem>
                     <FormItem
                         label="TurnOver"

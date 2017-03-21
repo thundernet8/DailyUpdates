@@ -18,8 +18,9 @@ export default class CreateRecordPage extends React.Component {
         destination: '',
         detail: '',
         submitting: false,
-        subTasks: null,
-        fieldId: 0,
+        projectId: 0,
+        topFieldId: 0,
+        subFieldId: 0,
         turnover: false
     }
 
@@ -35,14 +36,35 @@ export default class CreateRecordPage extends React.Component {
         })
     }
 
-    selectTask = (value) => {
-        const fieldId = parseInt(value)
-        const task = this.state.subTasks.filter(task => task.Id === fieldId)[0]
+    selectProject = (value) => {
         this.setState({
-            fieldId: fieldId,
-            destination: task.Destination,
-            turnover: task.TurnOver !== null
+            projectId: parseInt(value)
         })
+    }
+
+    selectTopTask = (value) => {
+        this.setState({
+            topFieldId: parseInt(value)
+        })
+    }
+
+    selectSubTask = (value) => {
+        const subFieldId = parseInt(value)
+        const subFields = this.getSpecifiedSubFields(this.state.topFieldId)
+        if (subFields.length > 0) {
+            const subField = subFields.filter(item => item.Id === subFieldId)[0]
+            this.setState({
+                subFieldId: subFieldId,
+                destination: subField.Destination,
+                turnover: subField.TurnOver !== null
+            })
+        } else {
+            this.setState({
+                subFieldId: subFieldId,
+                destination: '',
+                turnover: false
+            })
+        }
     }
 
     onTurnoverChange = (checked) => {
@@ -51,12 +73,27 @@ export default class CreateRecordPage extends React.Component {
         })
     }
 
+    getSpecifiedTopFields = () => {
+        return this.props.tasks.filter(task => task.ProjectId === this.state.projectId)
+    }
+
+    getSpecifiedSubFields = (topFieldId) => {
+        let subFields = []
+        this.props.tasks.forEach((topField) => {
+            if (topField.ProjectId === this.state.projectId && topField.Id === topFieldId) {
+                subFields = topField.SubFields
+            }
+        })
+
+        return subFields
+    }
+
     createRecord = () => {
         this.setState({
             submitting: true
         })
         this.props.onCreateRecord({
-            FieldId: this.state.fieldId,
+            FieldId: this.state.subFieldId,
             Destination: this.state.destination,
             Detail: this.state.detail,
             TurnOver: this.state.turnover
@@ -77,30 +114,14 @@ export default class CreateRecordPage extends React.Component {
     }
 
     componentWillMount () {
-        this.props.onGetTasks()
+        this.props.onPrepareData()
     }
 
     componentWillReceiveProps (nextProps) {
-        if (nextProps.tasks) {
-            const subTasks = nextProps.tasks.filter(task => task.Parent !== 0)
+        if (nextProps.projects && nextProps.projects.length > 0) {
             this.setState({
-                subTasks: subTasks
+                projectId: nextProps.projects[0].Id
             })
-            if (this.state.fieldId === 0 && subTasks.length > 0) {
-                this.setState({
-                    fieldId: subTasks[0].Id
-                })
-            }
-            if (this.state.destination === '' && subTasks.length > 0) {
-                this.setState({
-                    destination: subTasks[0].Destination
-                })
-            }
-            if (subTasks.length > 0) {
-                this.setState({
-                    turnover: subTasks[0].TurnOver !== null
-                })
-            }
         }
     }
 
@@ -114,7 +135,7 @@ export default class CreateRecordPage extends React.Component {
             )
         }
 
-        if (!this.state.subTasks) {
+        if (!this.props.tasks || !this.props.projects) {
             return (
                 <div className={classNames('createRecordWrap loading', styles.createRecordWrap)}>
                     <Spin className={styles.pageSpin}/>
@@ -122,7 +143,7 @@ export default class CreateRecordPage extends React.Component {
             )
         }
 
-        if (this.state.subTasks.length < 1) {
+        if (this.props.tasks.length < 1) {
             return (
                 <div className={classNames('createRecordWrap', styles.createRecordWrap)}>
                     <h2 className={classNames('pageTitle', styles.pageTitle)}>Create Record</h2>
@@ -138,7 +159,15 @@ export default class CreateRecordPage extends React.Component {
 
         const btnWrapperCol = { span: 14, offset: 15 }
 
-        const fieldSelection = this.state.subTasks.map((task) => {
+        const projectSelection = this.props.projects.map((project) => {
+            return <Option key={project.Id} value={project.Id.toString()}>{project.Name}</Option>
+        })
+
+        const topFieldSelection = this.getSpecifiedTopFields().map((task) => {
+            return <Option key={task.Id} value={task.Id.toString()}>{task.Name}</Option>
+        })
+
+        const getSubFieldSelection = (topFieldId) => this.getSpecifiedSubFields(topFieldId).map((task) => {
             return (
                 <Option key={task.Id} value={task.Id.toString()}>{task.Name}</Option>
             )
@@ -149,10 +178,17 @@ export default class CreateRecordPage extends React.Component {
                 <h2 className={classNames('pageTitle', styles.pageTitle)}>Create Record</h2>
                 <Form layout="horizontal">
                     <FormItem
+                        label="Project"
+                        {...formItemLayout}
+                    >
+                        <Select defaultValue={this.props.projects[0].Id.toString()} value={this.state.projectId.toString()} style={{ width: 200 }} onChange={this.selectProject}>{projectSelection}</Select>
+                    </FormItem>
+                    <FormItem
                         label="Field"
                         {...formItemLayout}
                     >
-                        <Select defaultValue={this.state.subTasks[0].Id.toString()} style={{ width: 200 }} onChange={this.selectTask}>{fieldSelection}</Select>
+                        <Select defaultValue={'Please Select Top Field'} style={{ width: 200 }} onChange={this.selectTopTask}>{topFieldSelection}</Select>
+                        <Select defaultValue={'Please Select Sub Field'} style={{ width: 200, marginLeft: 10 }} onChange={this.selectSubTask}>{getSubFieldSelection(this.state.topFieldId)}</Select>
                     </FormItem>
                     <FormItem
                         label="TurnOver"
@@ -173,7 +209,7 @@ export default class CreateRecordPage extends React.Component {
                         <Input type="textarea" placeholder="" onChange={this.detailInputChange} rows={10} disabled={this.state.submitting} value={this.state.detail}/>
                     </FormItem>
                     <FormItem wrapperCol={btnWrapperCol}>
-                        <Button type="primary" size="large" style={{width: 120}} loading={this.state.submitting} disabled={this.state.destination.length < 10} onClick={this.createRecord}>Create</Button>
+                        <Button type="primary" size="large" style={{width: 120}} loading={this.state.submitting} disabled={this.state.topFieldId === 0 || this.state.subField === 0 || this.state.destination.length < 10} onClick={this.createRecord}>Create</Button>
                     </FormItem>
                 </Form>
             </div>

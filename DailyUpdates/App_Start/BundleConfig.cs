@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace DailyUpdates
+namespace Aspen.DailyUpdates.Web.Application
 {
     public class BundleConfig
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace DailyUpdates.Areas.HelpPage.ModelDescriptions
+namespace Aspen.DailyUpdates.Web.Application.Areas.HelpPage.ModelDescriptions
 {
     /// <summary>
     /// Describes a type model.

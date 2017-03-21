@@ -1,12 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DBModel.Services;
+using Aspen.DailyUpdates.DBModel.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBModel.Services.Tests
+namespace Aspen.DailyUpdates.DBModel.Services.Tests
 {
     [TestClass()]
     public class ModelsManagerTests

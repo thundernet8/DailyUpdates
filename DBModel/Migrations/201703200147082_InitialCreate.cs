@@ -1,4 +1,4 @@
-namespace DBModel.Migrations
+namespace Aspen.DailyUpdates.DBModel.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;
