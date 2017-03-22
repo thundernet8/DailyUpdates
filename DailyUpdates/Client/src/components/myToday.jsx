@@ -118,11 +118,19 @@ export default class MyTodayPage extends React.Component {
             }
         })
 
+        const rowClassName = (record, index) => {
+            if (index % 2 === 0) {
+                return 'evenRow'
+            }
+            return 'oddRow'
+        }
+
         const actionsTable = (
             <Table
                 columns={actionColumns}
                 dataSource={actionsData}
                 bordered
+                rowClassName={rowClassName}
                 pagination={{pageSize: 20}}
             />
         )
@@ -133,8 +141,8 @@ export default class MyTodayPage extends React.Component {
                 <h3 className={styles.fieldTitle}>Records</h3>
                 {records.length > 0 &&
                 <Collapse defaultActiveKey={[records[0].Id.toString()]} accordion>
-                    {records.map((record) => {
-                        const header = <div className={styles.recordPaneHead}>{`Record #${record.Id}`}<span>{(new Date(record.Create)).toLocaleString()}</span><Link to={`records/edit/${record.Id}`}><Button type="default" icon="edit" onClick={this.editBtnClick}>Edit</Button></Link></div>
+                    {records.map((record, index) => {
+                        const header = <div className={styles.recordPaneHead}>{`Record #${index + 1}`}<span>{(new Date(record.Create)).toLocaleString()}</span><Link to={`records/edit/${record.Id}`}><Button type="default" icon="edit" onClick={this.editBtnClick}>Edit</Button></Link></div>
                         return (
                             <Panel className={styles.recordPanel} header={header} key={record.Id}>
                                 <Row gutter={10} className={styles.recordRow}>

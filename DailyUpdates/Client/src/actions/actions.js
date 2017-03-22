@@ -10,7 +10,6 @@ export const getOpenActions = () => {
         const api = CONSTANTS.ACTIONS_API + '/open'
         return axios.get(api)
             .then((ret) => {
-                console.log(ret)
                 dispatch({
                     type: CONSTANTS.GET_OPEN_ACTIONS_SUCCESS,
                     openActions: ret.data
@@ -19,7 +18,6 @@ export const getOpenActions = () => {
                 return ret.data
             })
             .catch((err) => {
-                console.dir(err)
                 const error = new Error(err.response.data.error)
                 dispatch({
                     type: CONSTANTS.GET_OPEN_ACTIONS_FAIL,
@@ -40,7 +38,6 @@ export const getMyActions = () => {
         const api = CONSTANTS.ACTIONS_API + '/me'
         return axios.get(api)
             .then((ret) => {
-                console.log(ret)
                 dispatch({
                     type: CONSTANTS.GET_MY_ACTIONS_SUCCESS,
                     myActions: ret.data
@@ -49,7 +46,6 @@ export const getMyActions = () => {
                 return ret.data
             })
             .catch((err) => {
-                console.dir(err)
                 const error = new Error(err.response.data.error)
                 dispatch({
                     type: CONSTANTS.GET_MY_ACTIONS_FAIL,
@@ -71,7 +67,6 @@ export const createAction = (data) => {
 
         return axios.post(api, data)
             .then((ret) => {
-                console.log(ret)
                 dispatch({
                     type: CONSTANTS.CREATE_RECORD_SUCCESS,
                     action: ret.data
@@ -80,7 +75,6 @@ export const createAction = (data) => {
                 return ret.data
             })
             .catch((err) => {
-                console.dir(err)
                 const error = new Error(err.response.data.error)
                 dispatch({
                     type: CONSTANTS.CREATE_ACTION_FAIL,
@@ -102,7 +96,6 @@ export const updateAction = (id, data) => {
 
         return axios.put(api, data)
             .then((ret) => {
-                console.log(ret)
                 dispatch({
                     type: CONSTANTS.UPDATE_ACTION_SUCCESS,
                     updatedAction: ret.data
@@ -111,7 +104,6 @@ export const updateAction = (id, data) => {
                 return ret.data
             })
             .catch((err) => {
-                console.dir(err)
                 const error = new Error(err.response.data.error)
                 dispatch({
                     type: CONSTANTS.UPDATE_ACTION_FAIL,
@@ -133,7 +125,6 @@ export const getMyAction = (id) => {
 
         return axios.get(api)
             .then((ret) => {
-                console.log(ret)
                 dispatch({
                     type: CONSTANTS.GET_MY_ACTION_SUCCESS,
                     myAction: ret.data
@@ -142,7 +133,6 @@ export const getMyAction = (id) => {
                 return ret.data
             })
             .catch((err) => {
-                console.dir(err)
                 const error = new Error(err.response.data.error)
                 dispatch({
                     type: CONSTANTS.GET_MY_ACTION_FAIL,

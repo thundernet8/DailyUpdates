@@ -33,6 +33,7 @@ export default class HomePage extends React.Component {
         let projectsDict = {}
         Projects.forEach((project) => {
             projectsDict['_' + project.Id] = project
+            projectGroups['_' + project.Id] = {project, topFields: [], openActions: []}
         })
 
         if (this.state.type === 1) {
@@ -263,7 +264,7 @@ export default class HomePage extends React.Component {
     }
 
     render () {
-        const headTitle = <h2 className={classNames('pageTitle', styles.pageTitle)}>{this.props.params && this.props.year ? `Activities of ${this.props.params.year}-${this.props.params.month} -${this.props.params.day}` : 'Activities of Today'}</h2>
+        const headTitle = <h2 className={classNames('pageTitle', styles.pageTitle)}>{this.props.params && this.props.params.year ? `Activities of ${this.props.params.year}.${this.props.params.month}.${this.props.params.day}` : 'Activities of Today'}</h2>
 
         if (this.state.loading) {
             return (
@@ -285,6 +286,13 @@ export default class HomePage extends React.Component {
 
         const projectGroups = this.groupDataByProject()
 
+        const rowClassName = (record, index) => {
+            if (index % 2 === 0) {
+                return 'evenRow'
+            }
+            return 'oddRow'
+        }
+
         const tables = Object.values(projectGroups).map((projectGroup, index) => {
             const project = projectGroup.project
             const items = this.state.type === 1 ? projectGroup.topFields : projectGroup.openActions
@@ -300,6 +308,7 @@ export default class HomePage extends React.Component {
                     dataSource={data}
                     bordered
                     title={title}
+                    rowClassName={rowClassName}
                     pagination={pagination}
                 />
             )

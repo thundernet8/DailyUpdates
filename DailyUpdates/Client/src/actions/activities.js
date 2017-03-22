@@ -10,14 +10,12 @@ export const getTodayActivities = () => {
         const api = CONSTANTS.ACTIVITIES_API + '/today'
         return axios.get(api)
             .then((ret) => {
-                console.log(ret)
                 dispatch({
                     type: CONSTANTS.GET_ACTIVITIES_SUCCESS,
                     activities: ret.data
                 })
             })
             .catch((err) => {
-                console.dir(err)
                 const error = new Error(err.response.data.error)
                 dispatch({
                     type: CONSTANTS.GET_ACTIVITIES_FAIL,
@@ -37,14 +35,12 @@ export const getActivitiesOfDate = (year, month, day) => {
         const api = CONSTANTS.ACTIVITIES_API + '/' + year + '/' + month + '/' + day
         return axios.get(api)
             .then((ret) => {
-                console.log(ret)
                 dispatch({
                     type: CONSTANTS.GET_ACTIVITIES_SUCCESS,
                     activities: ret.data
                 })
             })
             .catch((err) => {
-                console.dir(err)
                 const error = new Error(err.response.data.error)
                 dispatch({
                     type: CONSTANTS.GET_ACTIVITIES_FAIL,

@@ -60,16 +60,24 @@ export default class UsersPage extends React.Component {
                 id: user.Id,
                 name: user.Name,
                 domainName: user.DomainName,
-                create: user.Create,
+                create: (new Date(user.Create)).toLocaleString(),
                 role: user.RoleStr
             }
         })
+
+        const rowClassName = (record, index) => {
+            if (index % 2 === 0) {
+                return 'evenRow'
+            }
+            return 'oddRow'
+        }
 
         const usersTable = (
             <Table
                 columns={columns}
                 dataSource={data}
                 bordered
+                rowClassName={rowClassName}
                 pagination={false}
             />
         )

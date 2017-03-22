@@ -83,10 +83,5 @@ namespace Aspen.DailyUpdates.Web.Application.Controllers
                 return new Response(ex);
             }
         }
-
-        // DELETE: api/Projects/5
-        public void Delete(int id)
-        {
-        }
     }
 }

@@ -41,8 +41,22 @@ namespace Aspen.DailyUpdates.Web.Application.Controllers
         {
             try
             {
-                List<Field> tasks = _modelsManager.GetFields(null).ToList();
-                return new Response(JArray.FromObject(tasks));
+                List<Field> fields = _modelsManager.GetFields(null).ToList();
+                return new Response(JArray.FromObject(fields));
+            }
+            catch (Exception ex)
+            {
+                return new Response(ex);
+            }
+        }
+
+        [Route("{id:int}")]
+        public HttpResponseMessage GetTask(int id)
+        {
+            try
+            {
+                Field field = _modelsManager.GetField(id);
+                return new Response(JObject.FromObject(field));
             }
             catch (Exception ex)
             {
@@ -58,6 +72,21 @@ namespace Aspen.DailyUpdates.Web.Application.Controllers
             {
                 Field newField = _modelsManager.AddField(field.Name, field.Destination, field.Start.Date, field.End.Date, field.ProjectId, field.Parent);
                 return new Response(JObject.FromObject(newField));
+            }
+            catch (Exception ex)
+            {
+                return new Response(ex);
+            }
+        }
+
+        [HttpPut]
+        [Route("{id:int}")]
+        public HttpResponseMessage UpdateTask(int id, [FromBody]Field field)
+        {
+            try
+            {
+                Field updatedField = _modelsManager.UpdateField(id, field.Name, field.Destination, field.Start, field.End, field.ProjectId, field.Parent);
+                return new Response(JObject.FromObject(updatedField));
             }
             catch (Exception ex)
             {

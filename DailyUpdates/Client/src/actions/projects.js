@@ -10,7 +10,6 @@ export const getAllProjects = () => {
         const api = CONSTANTS.PROJECTS_API
         return axios.get(api)
             .then((ret) => {
-                console.log(ret)
                 dispatch({
                     type: CONSTANTS.GET_PROJECTS_SUCCESS,
                     projects: ret.data
@@ -19,7 +18,6 @@ export const getAllProjects = () => {
                 return ret.data
             })
             .catch((err) => {
-                console.dir(err)
                 const error = new Error(err.response.data.error)
                 dispatch({
                     type: CONSTANTS.GET_PROJECTS_FAIL,
@@ -41,7 +39,6 @@ export const createProject = (data) => {
 
         return axios.post(api, data)
             .then((ret) => {
-                console.log(ret)
                 dispatch({
                     type: CONSTANTS.CREATE_PROJECT_SUCCESS,
                     project: ret.data
@@ -50,7 +47,6 @@ export const createProject = (data) => {
                 return ret.data
             })
             .catch((err) => {
-                console.dir(err)
                 const error = new Error(err.response.data.error)
                 dispatch({
                     type: CONSTANTS.CREATE_PROJECT_FAIL,

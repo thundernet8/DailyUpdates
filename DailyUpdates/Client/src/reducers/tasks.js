@@ -21,3 +21,12 @@ export const tasksReducer = (state = null, action) => {
             return state
     }
 }
+
+export const taskReducer = (state = null, action) => {
+    switch (action.type) {
+        case CONSTANTS.GET_TASK_SUCCESS:
+            return action.task
+        default:
+            return state
+    }
+}

@@ -18,12 +18,17 @@ import UsersPage from './containers/users'
 import CreateUserPage from './containers/createUser'
 import CreateActionPage from './containers/createAction'
 import EditActionPage from './containers/editAction'
+import EditTaskPage from './containers/editTask'
 
 const validateDateHandler = (nextState, replace, callback) => {
     const dataStr = nextState.params.year + '-' + nextState.params.month + '-' + nextState.params.day
     const valid = moment(dataStr, 'YYYY-MM-DD').isValid()
+    const today = new Date()
+    const isToday = today.getFullYear() === parseInt(nextState.params.year) && (today.getMonth() + 1) === parseInt(nextState.params.month) && today.getDate() === parseInt(nextState.params.day)
     if (!valid) {
         replace('/404')
+    } else if (isToday) {
+        replace('/today')
     }
     callback()
 }
@@ -40,6 +45,7 @@ const routes = (
             <Route path="/projects/new" component={CreateProjectPage}/>
             <Route path="/tasks" component={TasksPage}/>
             <Route path="/tasks/new" component={CreateTaskPage}/>
+            <Route path="/tasks/edit/:id" component={EditTaskPage}/>
             <Route path="/records/new" component={CreateRecordPage}/>
             <Route path="/records/edit/:id" component={EditRecordPage}/>
             <Route path="/actions/new" component={CreateActionPage}/>

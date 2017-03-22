@@ -10,7 +10,6 @@ export const getMyRecordsToday = () => {
         const api = CONSTANTS.RECORDS_API + '/me/today'
         return axios.get(api)
             .then((ret) => {
-                console.log(ret)
                 dispatch({
                     type: CONSTANTS.GET_MY_RECORDS_TODAY_SUCCESS,
                     myRecords: ret.data
@@ -19,7 +18,6 @@ export const getMyRecordsToday = () => {
                 return ret.data
             })
             .catch((err) => {
-                console.dir(err)
                 const error = new Error(err.response.data.error)
                 dispatch({
                     type: CONSTANTS.GET_MY_RECORDS_TODAY_FAIL,
@@ -41,7 +39,6 @@ export const createRecord = (data) => {
 
         return axios.post(api, data)
             .then((ret) => {
-                console.log(ret)
                 dispatch({
                     type: CONSTANTS.CREATE_RECORD_SUCCESS,
                     record: ret.data
@@ -50,7 +47,6 @@ export const createRecord = (data) => {
                 return ret.data
             })
             .catch((err) => {
-                console.dir(err)
                 const error = new Error(err.response.data.error)
                 dispatch({
                     type: CONSTANTS.CREATE_RECORD_FAIL,
@@ -72,7 +68,6 @@ export const updateRecord = (id, data) => {
 
         return axios.put(api, data)
             .then((ret) => {
-                console.log(ret)
                 dispatch({
                     type: CONSTANTS.UPDATE_RECORD_SUCCESS,
                     updatedRecord: ret.data
@@ -81,7 +76,6 @@ export const updateRecord = (id, data) => {
                 return ret.data
             })
             .catch((err) => {
-                console.dir(err)
                 const error = new Error(err.response.data.error)
                 dispatch({
                     type: CONSTANTS.UPDATE_RECORD_FAIL,
@@ -103,7 +97,6 @@ export const getMyRecord = (id) => {
 
         return axios.get(api)
             .then((ret) => {
-                console.log(ret)
                 dispatch({
                     type: CONSTANTS.GET_MY_RECORD_SUCCESS,
                     myRecord: ret.data
@@ -112,7 +105,6 @@ export const getMyRecord = (id) => {
                 return ret.data
             })
             .catch((err) => {
-                console.dir(err)
                 const error = new Error(err.response.data.error)
                 dispatch({
                     type: CONSTANTS.GET_MY_RECORD_FAIL,

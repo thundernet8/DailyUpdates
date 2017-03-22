@@ -8,6 +8,8 @@ import { syncHistoryWithStore }                                 from 'react-rout
 import { useScroll }                                            from 'react-router-scroll'
 import configureStore                                           from './store/configureStore'
 import routes                                                   from './routes'
+import enUS                                                     from 'antd/lib/locale-provider/en_US'
+import { LocaleProvider }                                       from 'antd'
 // import 'antd/dist/antd.css' // we use 'babel-plugin-import' import antd components css
 
 let store = configureStore()
@@ -27,9 +29,11 @@ if (module.hot) {
 }
 
 ReactDOM.render(
-  <Provider store={store}>
-    <Router history={history} routes={routes} render={applyRouterMiddleware(useScroll())} />
-  </Provider>,
+    <LocaleProvider locale={enUS}>
+        <Provider store={store}>
+            <Router history={history} routes={routes} render={applyRouterMiddleware(useScroll())} />
+        </Provider>
+    </LocaleProvider>,
   document.getElementById('app')
 )
 

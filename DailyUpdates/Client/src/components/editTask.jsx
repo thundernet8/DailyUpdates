@@ -2,18 +2,14 @@ import React, { PropTypes }                         from 'react'
 import { Link }                                     from 'react-router'
 import classNames                                   from 'classnames'
 import styles                                       from '../styles/app.scss'
+import moment                                       from 'moment'
 import { Spin, Card, Col, Row, Icon, Form, Input, Button, message, Select, DatePicker }               from 'antd'
 
 const Option = Select.Option
 const FormItem = Form.Item
 const RangePicker = DatePicker.RangePicker
 
-message.config({
-    top: 75,
-    duration: 5
-})
-
-export default class CreateTaskPage extends React.Component {
+export default class EditTaskPage extends React.Component {
 
     static propTypes = {
         name: PropTypes.string,
@@ -74,11 +70,11 @@ export default class CreateTaskPage extends React.Component {
         })
     }
 
-    createTaskField = () => {
+    updateTaskField = () => {
         this.setState({
             submitting: true
         })
-        this.props.onCreateTaskField({
+        this.props.onUpdateTaskField(this.props.task.Id, {
             Name: this.state.name,
             Destination: this.state.destination,
             Parent: this.state.parentId,
@@ -87,7 +83,7 @@ export default class CreateTaskPage extends React.Component {
             End: this.state.endDate
         })
         .then((ret) => {
-            message.success('Task field create successfully.')
+            message.success('Task field update successfully.')
             this.setState({
                 submitting: false,
                 name: '',
@@ -103,7 +99,7 @@ export default class CreateTaskPage extends React.Component {
     }
 
     componentWillMount () {
-        this.props.onPrepareData()
+        this.props.onPrepareData(this.props.params.id)
         .then(() => {
             this.setState({
                 prepared: true
@@ -112,9 +108,15 @@ export default class CreateTaskPage extends React.Component {
     }
 
     componentWillReceiveProps (nextProps) {
-        if (nextProps.projects && nextProps.projects.length > 0 && !this.state.projectId) {
+        if (nextProps.task) {
+            const task = nextProps.task
             this.setState({
-                projectId: nextProps.projects[0].Id
+                name: task.Name,
+                destination: task.Destination,
+                projectId: task.ProjectId,
+                parentId: task.Parent,
+                startDate: task.Start,
+                endDate: task.End
             })
         }
     }
@@ -122,16 +124,16 @@ export default class CreateTaskPage extends React.Component {
     render () {
         if (!this.props.me || !this.props.me.IsAdmin) {
             return (
-                <div className={classNames('createTaskWrap err', styles.createTaskWrap)}>
-                    <h2 className={classNames('pageTitle', styles.pageTitle)}>Create Task Field</h2>
-                    <h3 className={styles.pageSubTitle}><Icon type="frown-o" />Only Site Owner or Admin Can Create A Task Field.</h3>
+                <div className={classNames('editTaskWrap err', styles.editTaskWrap)}>
+                    <h2 className={classNames('pageTitle', styles.pageTitle)}>Edit Task Field</h2>
+                    <h3 className={styles.pageSubTitle}><Icon type="frown-o" />Only Site Owner or Admin Can Edit A Task Field.</h3>
                 </div>
             )
         }
 
         if (!this.state.prepared) {
             return (
-                <div className={classNames('createTaskWrap loading', styles.createTaskWrap)}>
+                <div className={classNames('editTaskWrap loading', styles.editTaskWrap)}>
                     <Spin className={styles.pageSpin}/>
                 </div>
             )
@@ -139,9 +141,9 @@ export default class CreateTaskPage extends React.Component {
 
         if (this.props.projects.length < 1) {
             return (
-                <div className={classNames('createTaskWrap', styles.createTaskWrap)}>
-                    <h2 className={classNames('pageTitle', styles.pageTitle)}>Create Task Field</h2>
-                    <h3 className={styles.pageSubTitle}><Icon type="frown-o" />No project for adding tasks</h3>
+                <div className={classNames('editTaskWrap', styles.editTaskWrap)}>
+                    <h2 className={classNames('pageTitle', styles.pageTitle)}>Edit Task Field</h2>
+                    <h3 className={styles.pageSubTitle}><Icon type="frown-o" />No project for the task</h3>
                 </div>
             )
         }
@@ -176,8 +178,8 @@ export default class CreateTaskPage extends React.Component {
         }
 
         return (
-            <div className={classNames('createTaskWrap', styles.createTaskWrap)}>
-                <h2 className={classNames('pageTitle', styles.pageTitle)}>Create Task Field</h2>
+            <div className={classNames('editTaskWrap', styles.editTaskWrap)}>
+                <h2 className={classNames('pageTitle', styles.pageTitle)}>Edit Task Field</h2>
                 <Form layout="horizontal">
                     <FormItem
                         label="Field Name"
@@ -189,20 +191,20 @@ export default class CreateTaskPage extends React.Component {
                         label="Project"
                         {...formItemLayout}
                     >
-                        <Select defaultValue={this.props.projects[0].Id.toString()} style={{ width: 200 }} onChange={this.selectProject}>{projectSelection}</Select>
+                        <Select value={this.state.projectId.toString()} style={{ width: 200 }} onChange={this.selectProject}>{projectSelection}</Select>
                     </FormItem>
                     <FormItem
                         label="Parent Field"
                         {...formItemLayout}
                     >
                         {parentFieldSelection}
-                        <span style={{marginLeft: 10}}>{this.state.parentId === 0 ? 'A top field will be created' : 'A sub field will be created'}</span>
+                        <span style={{marginLeft: 10}}>{this.state.parentId === 0 ? 'It will be a top field' : 'It will be a sub field'}</span>
                     </FormItem>
                     <FormItem
                         label="Date Range"
                         {...formItemLayout}
                     >
-                        <RangePicker onChange={this.chooseDateRange} />
+                        <RangePicker value={[moment(this.state.startDate), moment(this.state.endDate)]} onChange={this.chooseDateRange} allowClear={false}/>
                     </FormItem>
                     <FormItem
                         label="Field Destination"
@@ -211,7 +213,7 @@ export default class CreateTaskPage extends React.Component {
                         <Input type="textarea" placeholder="" onChange={this.desInputChange} rows={10} disabled={this.state.submitting} value={this.state.destination}/>
                     </FormItem>
                     <FormItem wrapperCol={btnWrapperCol}>
-                        <Button type="primary" size="large" style={{width: 120}} loading={this.state.submitting} disabled={this.state.name.length < 5 || !this.state.destination || !this.state.projectId || !this.state.startDate || !this.state.endDate} onClick={this.createTaskField}>Create</Button>
+                        <Button type="primary" size="large" style={{width: 120}} loading={this.state.submitting} disabled={this.state.name.length < 5 || !this.state.destination || !this.state.projectId || !this.state.startDate || !this.state.endDate} onClick={this.updateTaskField}>Update</Button>
                     </FormItem>
                 </Form>
             </div>

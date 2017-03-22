@@ -63,6 +63,10 @@ html, body {
     font-family: "Helvetica Neue", Helvetica, Tahoma, Arial, STXihei, "Microsoft YaHei", 微软雅黑, sans-serif;
 }
 
+body {
+    overflow-y: scroll;
+}
+
 img {
     max-width: 100%;
 }
@@ -174,7 +178,7 @@ p {
     th {
         font-weight: 600;
         font-size: 16px;
-        text-align: center;
+        text-align: center !important;
     }
     .ant-table-thead > tr > th {
         color: #666;
@@ -185,6 +189,13 @@ p {
     .centralCol {
         text-align: center !important;
     }
+    .oddRow {
+        background-color: #fbfdfe;
+    }
+}
+
+.ant-form-item-label label {
+    font-weight: bold;
 }
 
 .homeWrap {
@@ -244,6 +255,6 @@ p {
         z-index: 999;
     }
     >div>.container {
-        margin-top: 64px;
+        padding-top: 64px !important;
     }
 }

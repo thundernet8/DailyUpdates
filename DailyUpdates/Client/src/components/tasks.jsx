@@ -19,8 +19,7 @@ export default class TasksPage extends React.Component {
         return (
             <Collapse defaultActiveKey={[subFields[0].Id.toString()]} accordion>
                 {subFields.map((subField) => {
-                    /* const header = <div>{subField.Name}<Link to={`tasks/edit/${subField.Id}`}><Button type="default" icon="edit" onClick={this.editBtnClick}>Edit</Button></Link></div> */
-                    const header = <div>{subField.Name}</div>
+                    const header = <div>{subField.Name}<Link to={`tasks/edit/${subField.Id}`}><Button type="default" icon="edit" onClick={this.editBtnClick}>Edit</Button></Link></div>
                     return (
                         <Panel className={styles.subFieldPanel} header={header} key={subField.Id}>
                             <p>{subField.Destination}</p>

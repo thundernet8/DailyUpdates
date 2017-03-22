@@ -54,7 +54,7 @@ namespace Aspen.DailyUpdates.Web.Application.Controllers
             try
             {
                 User newUser;
-                if (user.Role == UserRole.Admin)
+                if (user.Role == UserRole.Owner)
                 {
                     newUser = _modelsManager.AddOwner(user.Name, user.DomainName);
                 }
