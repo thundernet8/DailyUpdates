@@ -11,8 +11,8 @@ Simple daily report app for team members.
 
 ## Screenshots
 
-![Shot1](./screenshots/shot1.png)
+![Shot1](./Screenshots/shot1.png)
 
-![Shot2](./screenshots/shot2.png)
+![Shot2](./Screenshots/shot2.png)
 
-![Shot3](./screenshots/shot3.png)
+![Shot3](./Screenshots/shot3.png)
